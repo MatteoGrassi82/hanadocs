@@ -11,6 +11,33 @@ The system combines constrained generation, reference-free evaluation, and conti
 
 ## Core Self-Correction Architecture
 
+```mermaid
+graph TB
+    INPUT["Patient Response"] --> RT
+
+    subgraph RTLayer["Real-Time Validation (per utterance)"]
+        RT["Template Compliance\nEntity Grounding\nConfidence Scoring\nSafety Filter"]
+    end
+
+    subgraph TLLayer["Turn-Level Validation (between turns)"]
+        TL["Semantic Consistency\nCross-Reference Validation\nContext Coherence\nDomain Rule Check"]
+    end
+
+    subgraph PCLayer["Post-Call Validation (async)"]
+        PC["LLM-as-Judge Evaluation\nProtocol Compliance\nHistory Validation\nQuality Scoring"]
+    end
+
+    RT -->|Pass| DELIVER["Deliver Response"]
+    RT -->|Fail| REGEN["Block & Regenerate"]
+    RT --> TL
+    TL -->|Issue Detected| REDIRECT["Soft Redirect\nor Clarify"]
+    TL -->|OK| NEXT["Continue\nConversation"]
+    NEXT --> PC
+    PC -->|Flag| REVIEW["Clinical Team\nReview"]
+    PC -->|Error Patterns| IMPROVE["Protocol &\nModel Updates"]
+    IMPROVE -.->|Feedback Loop| RT
+```
+
 ### Multi-Layered Validation System
 
 **Immediate Validation (per-utterance):**
