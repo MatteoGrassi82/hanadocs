@@ -15,12 +15,37 @@ This capability is architecturally distinct from the conversation engine. Vocal 
 
 Every voice conversation produces two parallel data streams:
 
-```
-Raw Audio → Vocal Intelligence Engine → Prosodic Features, Biomarker Signals
-                                          ↓
-Transcription → Conversation Engine → Clinical Data Extraction, Protocol Logic
-                                          ↓
-                              Merged Analysis → Risk Scoring, Engagement Metrics
+```mermaid
+graph TB
+    AUDIO["Raw Audio Input"] --> VIE["Vocal Intelligence Engine"]
+    AUDIO --> ASR["Speech Recognition"]
+
+    subgraph Stream1["Audio Feature Stream"]
+        VIE --> F0["F0 Pitch Tracking"]
+        VIE --> SR["Speech Rate Analysis"]
+        VIE --> EN["Energy Envelope"]
+        VIE --> SP["Spectral Features"]
+        VIE --> TT["Turn-Taking Dynamics"]
+    end
+
+    subgraph Stream2["Transcription Stream"]
+        ASR --> TX["Transcript"]
+        TX --> LS["Lexical Sentiment"]
+        TX --> KW["Clinical Keywords"]
+        TX --> SC["Semantic Coherence"]
+        TX --> RL["Response Latency"]
+    end
+
+    Stream1 --> MERGE["Merged Analysis"]
+    Stream2 --> MERGE
+    BL["Patient Vocal Baseline"] --> MERGE
+
+    MERGE --> RS["Risk Scoring"]
+    MERGE --> EM["Engagement Metrics"]
+    MERGE --> DD["Discrepancy Detection"]
+    RS --> SA["Safety Agents"]
+    EM --> CE["Conversation Engine"]
+    DD --> SA
 ```
 
 **Audio Feature Extraction:**

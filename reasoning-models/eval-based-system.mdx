@@ -28,6 +28,35 @@ HANA's adaptive reasoning system employs a sophisticated multi-tiered architectu
 
 ### Candidate Generation and Verification
 
+```mermaid
+graph LR
+    subgraph Generate["Generation"]
+        CS["Conversation\nState"] --> FM["Fast Model"]
+        FM --> C1["Candidate 1"]
+        FM --> C2["Candidate 2"]
+        FM --> CN["Candidate N"]
+    end
+
+    subgraph Verify["Verification"]
+        C1 --> VE["Reasoning\nEngine"]
+        C2 --> VE
+        CN --> VE
+        VE --> PC["Protocol\nCheck"]
+        VE --> EG["Entity\nGrounding"]
+        VE --> SF["Safety\nFilter"]
+    end
+
+    subgraph Select["Selection"]
+        PC --> SC["Score &\nRank"]
+        EG --> SC
+        SF --> SC
+        SC --> OPT["Optimal\nResponse"]
+        OPT --> VS["Voice\nSynthesis"]
+    end
+
+    SC -.->|Calibration Feedback| FM
+```
+
 HANA's conversation engine uses a generate-and-verify architecture for response selection:
 
 - A fast, lightweight model generates candidate responses for the next conversation turn

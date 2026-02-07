@@ -19,6 +19,24 @@ The Deliberation Framework comprises:
 - **Expert Model Block**: Consists of independent expert agents that evaluate tasks from specialized perspectives, each generating probability distributions over potential actions
 - **Deliberation Aggregation Model**: Synthesizes expert inputs into a final decision, leveraging nuanced evaluation and probabilistic weighting
 
+```mermaid
+graph TB
+    Q["Clinical Query\n+ Patient Context"] --> TM["Triage Model"]
+
+    TM -->|"Task Type + Specialties"| E1["Expert Model 1"]
+    TM -->|"Task Type + Specialties"| E2["Expert Model 2"]
+    TM -->|"Task Type + Specialties"| EN["Expert Model N"]
+
+    E1 -->|"Response + P(X)"| AGG["Deliberation\nAggregation"]
+    E2 -->|"Response + P(X)"| AGG
+    EN -->|"Response + P(X)"| AGG
+
+    AGG --> WLOP["WLOP Probability\nWeighting"]
+    WLOP --> CB["Cascade\nBoosting"]
+    CB --> DM["Deliberation\nModel"]
+    DM --> PLAN["Final Conversation Plan\nQuestions · Branching · Escalation"]
+```
+
 ### Expert-Based Decomposition
 
 The Triage Model evaluates clinical queries (Q) and assigns domain-specific models based on identified requirements:

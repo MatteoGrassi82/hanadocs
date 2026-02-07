@@ -1,5 +1,5 @@
 ---
-title: "SuperSafe Intelligence"
+title: "Clinical Safety Architecture"
 description: "Ensuring patient safety through calibrated confidence, hallucination reduction, and rigorous training data controls in voice-based clinical AI."
 ---
 
@@ -54,6 +54,31 @@ HANA validates calibration through continuous production monitoring:
 By constraining the conversation engine to pre-approved response templates and grounding all entity references in verified data sources, HANA minimizes individual model biases and substantially reduces hallucinations.
 
 ### Anti-Hallucination Architecture
+
+```mermaid
+graph TB
+    INPUT["Patient Conversation"] --> L1
+
+    subgraph Stack["Safety Stack"]
+        direction TB
+        L1["Layer 1: Protocol Constraints\nApproved questions only · No freeform advice"]
+        L2["Layer 2: Entity Grounding\nEHR validation · Drug DB · SNOMED/ICD-10"]
+        L3["Layer 3: Output Validation\nSemantic check · Post-utterance verification"]
+        L4["Layer 4: Human Oversight\nFull logging · 24h flagged review"]
+        L1 --> L2 --> L3 --> L4
+    end
+
+    subgraph Agents["Observational Safety Agents (Rule-Based)"]
+        DS["Direct Signals\nSelf-harm · Crisis · Medication misuse"]
+        AS["Associative Signals\nCompound risk patterns"]
+        VCF["Vocal + Content Fusion\nText-prosody discrepancy"]
+    end
+
+    DS --> ESC["Escalation Protocol"]
+    AS --> ESC
+    VCF --> ESC
+    Agents -.->|Parallel Monitoring| Stack
+```
 
 **Layer 1: Protocol Constraints**
 - Only approved questions can be asked
