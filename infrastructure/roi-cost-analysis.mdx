@@ -1,0 +1,186 @@
+---
+title: "ROI & Cost Analysis"
+description: "Infrastructure economics, cost projections, and return on investment for HANA's voice-based patient engagement platform."
+---
+
+## The Economics of Patient Engagement
+
+Healthcare organizations spend between $150-250 per patient on manual engagement workflows — phone tag, missed appointments, incomplete intake forms, and staff time spent chasing information. Most of this cost is labor: medical assistants, care coordinators, and front desk staff performing repetitive, high-volume outreach.
+
+HANA replaces the most expensive and least scalable part of this equation — the human-initiated phone call — with AI-driven conversations that cost a fraction per interaction while achieving higher completion rates.
+
+## Cost Per Conversation
+
+HANA's fully loaded cost per patient conversation:
+
+| Component | Cost Per Conversation | Notes |
+|-----------|----------------------|-------|
+| LLM inference (reasoning engine) | $0.08 - $0.15 | Pre-call planning + post-call analysis |
+| LLM inference (conversation engine) | $0.05 - $0.12 | Real-time dialogue, varies by length |
+| Voice synthesis | $0.03 - $0.06 | Text-to-speech for outbound calls |
+| Speech recognition | $0.04 - $0.08 | Real-time transcription |
+| Telephony | $0.02 - $0.05 | SIP/PSTN per-minute costs |
+| Infrastructure (compute, storage) | $0.02 - $0.04 | Amortized server costs |
+| Evaluation & monitoring | $0.01 - $0.02 | Quality assurance pipeline |
+| **Total per conversation** | **$0.25 - $0.52** | **Average: ~$0.35** |
+
+Compare this to the cost of a human-performed equivalent:
+
+| Method | Cost Per Contact | Completion Rate | Effective Cost Per Completed Engagement |
+|--------|-----------------|-----------------|---------------------------------------|
+| Medical assistant phone call | $12 - $18 | 35-45% | $30 - $50 |
+| Care coordinator outreach | $15 - $25 | 40-55% | $30 - $60 |
+| Text/SMS campaign | $0.50 - $1.50 | 15-25% | $3 - $8 |
+| Patient portal message | $0.10 - $0.30 | 8-15% | $1 - $3 |
+| **HANA voice conversation** | **$0.25 - $0.52** | **68-82%** | **$0.35 - $0.70** |
+
+HANA achieves the engagement depth of a phone call at the cost of a text message.
+
+## Infrastructure Architecture & Costs
+
+### Current Production Infrastructure
+
+HANA's infrastructure is designed for cost efficiency at scale through a cloud-native architecture:
+
+**Compute:**
+- Kubernetes-based orchestration on GCP/AWS
+- Auto-scaling conversation engine pods (scale to zero when idle)
+- GPU-accelerated inference for reasoning engine
+- CPU-based inference for real-time conversation (optimized for latency over throughput)
+
+**Storage:**
+- Conversation transcripts and structured data in encrypted cloud storage
+- EHR integration cache with configurable TTL
+- Model artifacts stored in versioned object storage
+
+**Networking:**
+- SIP trunking for telephony with geographic redundancy
+- WebSocket connections for real-time streaming
+- VPN tunnels for EHR integration endpoints
+
+### Monthly Infrastructure Costs at Scale
+
+| Scale | Monthly Conversations | Infrastructure Cost | Cost Per Conversation |
+|-------|----------------------|--------------------|-----------------------|
+| Startup | 10,000 | $3,500 | $0.35 |
+| Growth | 50,000 | $12,000 | $0.24 |
+| Scale | 200,000 | $35,000 | $0.18 |
+| Enterprise | 1,000,000+ | $120,000 | $0.12 |
+
+Infrastructure cost per conversation decreases significantly at scale due to:
+- Amortized fixed costs (base cluster, monitoring, security)
+- Improved GPU utilization through batched inference
+- Cached reasoning plans reused across similar patient profiles
+- Negotiated volume pricing on telephony and cloud compute
+
+### Cost Optimization Strategies
+
+**Intelligent model routing:**
+- Simple conversations (appointment confirmation, basic intake) use smaller, faster models
+- Complex conversations (behavioral health screening, medication reconciliation) use full reasoning pipeline
+- Routing decisions made pre-call based on patient profile and protocol complexity
+
+**Caching and reuse:**
+- Reasoning engine outputs for common patient profiles are cached and reused
+- Protocol-specific conversation plans are pre-computed and stored
+- Voice synthesis segments for standard phrases are pre-generated
+
+**Resource scheduling:**
+- Outbound campaigns scheduled during off-peak compute hours
+- GPU resources shared across inference workloads with priority queuing
+- Auto-scaling ensures zero waste during low-volume periods
+
+## ROI Model for Healthcare Organizations
+
+### Direct Cost Savings
+
+**Scenario: Mid-size primary care group (50 physicians, 150,000 patient panel)**
+
+| Current State | Annual Cost |
+|--------------|-------------|
+| Care coordinators (4 FTEs) | $240,000 |
+| Medical assistants (phone time allocation, ~30%) | $180,000 |
+| Missed appointment revenue loss (8% no-show rate) | $450,000 |
+| Incomplete intake rework | $95,000 |
+| **Total annual cost of engagement gaps** | **$965,000** |
+
+| With HANA | Annual Cost |
+|-----------|-------------|
+| HANA platform fee | $180,000 |
+| Reduced care coordinator need (4 → 2 FTEs) | $120,000 |
+| Reduced MA phone time (30% → 10%) | $60,000 |
+| Reduced no-show rate (8% → 3.5%) | $200,000 |
+| Reduced intake rework | $25,000 |
+| **Total annual cost with HANA** | **$585,000** |
+
+| **Net annual savings** | **$380,000** |
+|---|---|
+| **ROI** | **211%** |
+| **Payback period** | **5.7 months** |
+
+### Revenue Uplift
+
+Beyond cost savings, HANA generates revenue through improved patient engagement:
+
+| Revenue Driver | Mechanism | Estimated Annual Impact |
+|---------------|-----------|------------------------|
+| Reduced no-shows | Proactive outreach + rescheduling | $250,000 |
+| BHI/CCM billing | Automated qualifying conversations for CMS codes | $180,000 |
+| Improved care gap closure | Outreach for preventive screenings | $120,000 |
+| Patient retention | Higher engagement reduces churn | $95,000 |
+| **Total revenue uplift** | | **$645,000** |
+
+### Combined Financial Impact
+
+| Metric | Value |
+|--------|-------|
+| Total cost savings | $380,000/year |
+| Total revenue uplift | $645,000/year |
+| **Combined annual impact** | **$1,025,000/year** |
+| HANA annual cost | $180,000/year |
+| **Net annual benefit** | **$845,000/year** |
+| **Total ROI** | **469%** |
+
+## Implementation Cost
+
+HANA is designed for fast, low-cost implementation:
+
+| Phase | Duration | Cost to Organization |
+|-------|----------|---------------------|
+| Discovery & planning | Days 1-5 | Staff time only |
+| EHR integration & configuration | Days 6-15 | Staff time only (HANA provides integration) |
+| Testing & validation | Days 16-25 | Staff time only |
+| Training & go-live | Days 26-30 | Staff time only |
+| **Total implementation cost** | **30 days** | **< $15,000 in staff time** |
+
+No hardware purchases. No on-premise installation. No IT infrastructure changes.
+
+## Comparison: Build vs. Buy
+
+Organizations considering building their own patient engagement AI should consider:
+
+| Capability | Build (Internal) | Buy (HANA) |
+|-----------|-----------------|-------------|
+| Initial development | $500K - $2M, 12-18 months | $0, 30 days to deploy |
+| Ongoing maintenance | 2-4 FTE engineers ($300K-$800K/yr) | Included in platform fee |
+| Clinical protocol design | Requires clinical AI expertise | Pre-built, clinician-validated protocols |
+| EHR integration | 3-6 months per EHR system | Pre-built connectors, 1-2 weeks |
+| Compliance (HIPAA, SOC 2) | $100K-$300K for initial certification | Already certified |
+| Model updates & improvement | Requires ML team | Continuous updates included |
+| Scale infrastructure | Complex auto-scaling engineering | Managed by HANA |
+| **Total 3-year cost** | **$2M - $5M** | **$540K** |
+
+## Pricing Model
+
+HANA offers transparent, usage-based pricing:
+
+| Tier | Monthly Volume | Per Conversation | Monthly Minimum |
+|------|---------------|-----------------|-----------------|
+| Pilot | Up to 1,000 | $1.50 | $0 (30-day pilot) |
+| Growth | 1,000 - 10,000 | $1.00 | $1,000 |
+| Scale | 10,000 - 100,000 | $0.65 | $6,500 |
+| Enterprise | 100,000+ | Custom | Custom |
+
+All tiers include: EHR integration, protocol configuration, quality monitoring, compliance, and support.
+
+No setup fees. No long-term contracts required. 30-day pilot at no cost.

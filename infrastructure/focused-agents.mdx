@@ -1,0 +1,253 @@
+---
+title: "Focused Agents"
+description: "Deep dive into HANA's specialized AI agents: Voice Engagement Agent for patient outreach and Clinical Intake Agent for structured data collection."
+---
+
+## Agent Architecture
+
+HANA deploys specialized agents optimized for distinct clinical workflows. Each agent operates within HANA's dual-model architecture (reasoning engine + conversation engine) but is configured with domain-specific protocols, evaluation criteria, and escalation rules.
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                     HANA AGENT PLATFORM                         │
+│                                                                 │
+│  ┌────────────────────┐    ┌────────────────────┐             │
+│  │  VOICE ENGAGEMENT  │    │  CLINICAL INTAKE   │             │
+│  │  AGENT             │    │  AGENT             │             │
+│  │                    │    │                    │             │
+│  │  Outbound calls    │    │  Structured data   │             │
+│  │  Appointment mgmt  │    │  collection        │             │
+│  │  Care gap closure  │    │  Screening tools   │             │
+│  │  Follow-up         │    │  Pre-visit prep    │             │
+│  │  Retention         │    │  Assessment admin   │             │
+│  └────────┬───────────┘    └────────┬───────────┘             │
+│           │                         │                          │
+│           └──────────┬──────────────┘                          │
+│                      │                                         │
+│           ┌──────────▼───────────┐                             │
+│           │  SHARED PLATFORM     │                             │
+│           │                      │                             │
+│           │  • EHR Integration   │                             │
+│           │  • Patient Memory    │                             │
+│           │  • Safety Framework  │                             │
+│           │  • Quality Eval      │                             │
+│           │  • Telephony         │                             │
+│           │  • Analytics         │                             │
+│           └──────────────────────┘                             │
+│                                                                 │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Voice Engagement Agent
+
+The Voice Engagement Agent handles proactive patient outreach — the calls that healthcare organizations need to make but struggle to complete at scale.
+
+### Top-Level Use Cases
+
+**Inbound Call Handling:**
+Healthcare organizations can handle greater call volume with better outcomes and reduced operational cost.
+
+- **Skill-based routing**: Low-latency NLP activates contextually-specific protocols based on patient intent (scheduling, insurance, triage, registration, medications, labs, forms, records, billing)
+- **Warm transfer**: When the agent cannot fully resolve a request, it performs a warm handoff to the appropriate human staff member with complete conversation context
+- **Low-latency responses**: Simultaneous response planning on partial transcripts enables natural conversational pacing
+- **Per-patient memory**: Tracks care goals, language preferences, identity verification, preferred contact methods, and self-scheduled callbacks across all channels
+
+**Outbound Retention & Engagement:**
+Healthcare organizations can schedule and engage more patients through automated outreach.
+
+- **Automated detection**: Identifies patients requiring outreach by querying EHR data, waitlists, and scheduling systems
+- **Goal persistence**: Remembers outreach objectives and brings them up dynamically regardless of when the conversation occurs or who initiates it
+- **Multi-channel coordination**: Outreach spans voice, SMS, and messaging — with consistent context across channels
+
+### Capabilities
+
+**Appointment Management:**
+- Schedule, reschedule, and confirm appointments
+- Waitlist management and backfill
+- No-show follow-up and rebooking
+- Pre-visit preparation reminders
+
+**Care Gap Closure:**
+- Preventive screening outreach (mammography, colonoscopy, annual wellness)
+- Vaccination follow-up and scheduling
+- Lab work reminders
+- Referral completion tracking
+
+**Chronic Care Management:**
+- Monthly CCM check-in calls (CMS billable)
+- Medication adherence monitoring
+- Symptom tracking and trend detection
+- Care plan review and updates
+
+**Patient Retention:**
+- Post-visit satisfaction follow-up
+- Lapsed patient re-engagement
+- New patient onboarding and welcome calls
+- Provider transition support
+
+### Latency and Voice Optimization
+
+**Response Speed:**
+The Voice Engagement Agent is optimized for natural conversational pacing:
+
+- Parallel response generation: Plans the next response while the patient is still speaking
+- Pre-computed conversation segments: Common responses are pre-generated for instant delivery
+- Streaming synthesis: Voice generation begins before the full response is composed
+- Target response latency: < 800ms (p95)
+
+**Voice Quality:**
+- Natural, conversational speech synthesis
+- Speech normalization and voice-friendly text formatting
+- Dynamic prosody matching patient energy and pacing
+- Multiple voice options configurable per organization
+
+**Multi-Language Support:**
+- 30+ languages with clinical-grade accuracy
+- Automatic language detection and switching
+- Dialect awareness for regional variations
+- Bilingual conversation support (code-switching handling)
+
+### Goal-Oriented Interaction
+
+Every conversation has explicit goals set by the reasoning engine. The Voice Engagement Agent tracks goal completion in real-time:
+
+```
+Conversation Goals (example: annual wellness outreach)
+├── PRIMARY: Schedule annual wellness visit
+│   ├── Status: ✅ Completed (booked for Feb 15)
+│   └── Confidence: 0.98
+├── SECONDARY: Confirm current medications
+│   ├── Status: ✅ Completed (3 medications confirmed)
+│   └── Confidence: 0.95
+├── SECONDARY: Assess flu shot status
+│   ├── Status: ⚠️ Partial (patient unsure, flagged for nurse)
+│   └── Confidence: 0.62
+└── OPPORTUNISTIC: Update contact information
+    ├── Status: ✅ Completed (new phone number captured)
+    └── Confidence: 0.99
+```
+
+---
+
+## Clinical Intake Agent
+
+The Clinical Intake Agent handles structured clinical data collection — the forms, screenings, and assessments that traditionally require paper, portals, or staff phone calls.
+
+### Use Cases
+
+**Pre-Visit Intake:**
+- Demographics and insurance verification
+- Chief complaint and symptom collection
+- Medical history update
+- Current medication list
+- Allergy review
+- Social history (smoking, alcohol, exercise)
+- Family history updates
+
+**Clinical Screening:**
+- Validated assessment instruments (PHQ-9, GAD-7, AUDIT-C, CAGE-AID, etc.)
+- Proper administration with clinical scoring
+- Results automatically written to EHR
+- Threshold-based alerts for clinical team
+
+**BHI/CCM Qualifying Conversations:**
+- Structured interactions that meet CMS requirements for Behavioral Health Integration and Chronic Care Management billing codes
+- Automated documentation for billing compliance
+- Time tracking for CMS time-based codes
+
+**Post-Procedure Follow-Up:**
+- Structured symptom collection after procedures
+- Pain assessment and medication effectiveness
+- Complication screening
+- Recovery milestone tracking
+
+### Structured Data Collection
+
+The Clinical Intake Agent converts unstructured patient dialogue into structured clinical data:
+
+```
+Patient says: "I'm taking that blood pressure pill, the small white one, 
+              in the morning, and the cholesterol one at night. Oh and 
+              I started a new one for my back pain last week."
+
+HANA extracts:
+┌──────────────────────────────────────────────────────┐
+│  Medications:                                         │
+│  1. Antihypertensive (details needed)                │
+│     ├── Timing: morning                              │
+│     ├── Description: "small white pill"              │
+│     └── Status: NEEDS_VERIFICATION ⚠️                │
+│  2. Statin (details needed)                          │
+│     ├── Timing: evening                              │
+│     └── Status: NEEDS_VERIFICATION ⚠️                │
+│  3. Pain medication (new)                            │
+│     ├── Started: ~1 week ago                         │
+│     ├── Indication: back pain                        │
+│     └── Status: NEW_MEDICATION_ALERT 🔴              │
+│                                                       │
+│  Follow-up questions queued:                          │
+│  → "Do you know the name of your blood pressure      │
+│     medication? It might be on the bottle."           │
+│  → "Is the back pain medication something your        │
+│     doctor prescribed, or over-the-counter?"          │
+└──────────────────────────────────────────────────────┘
+```
+
+### Assessment Administration
+
+HANA administers validated clinical assessments through natural conversation rather than robotic question-reading:
+
+**Example: PHQ-9 Administration**
+
+Instead of: *"Over the last two weeks, how often have you been bothered by little interest or pleasure in doing things? Would you say not at all, several days, more than half the days, or nearly every day?"*
+
+HANA says: *"I'd like to check in on how you've been feeling lately. Over the past couple weeks, have you found yourself losing interest in things you usually enjoy?"*
+
+The system:
+- Administers all 9 items through natural conversation
+- Maps patient responses to PHQ-9 scoring categories
+- Calculates total score
+- Triggers appropriate clinical alerts based on score thresholds
+- Documents both the raw conversation and structured scores in the EHR
+
+### EHR Write-Back
+
+Collected data flows directly into the EHR:
+
+| Data Type | EHR Destination | Format |
+|-----------|----------------|--------|
+| Demographics | Patient record | FHIR Patient resource |
+| Medications | Medication list | FHIR MedicationStatement |
+| Conditions | Problem list | FHIR Condition (ICD-10) |
+| Screening scores | Clinical notes | FHIR Observation |
+| Vitals (reported) | Flowsheet | FHIR Observation |
+| Allergies | Allergy list | FHIR AllergyIntolerance |
+| Appointments | Schedule | FHIR Appointment |
+
+---
+
+## Agent Coordination
+
+When a single patient interaction spans both agents' capabilities, they coordinate seamlessly:
+
+**Example: Outbound follow-up call that triggers intake**
+
+1. Voice Engagement Agent calls patient for post-visit follow-up
+2. During conversation, patient mentions new symptoms
+3. Agent recognizes this triggers a clinical assessment protocol
+4. Clinical Intake Agent activates and administers relevant screening
+5. Results are scored, documented, and alerted to clinical team
+6. Voice Engagement Agent resumes to schedule follow-up appointment
+7. Complete interaction documented as a single conversation with structured outputs
+
+This coordination happens transparently — the patient experiences one continuous, natural conversation.
+
+## Future Agents
+
+HANA's agent platform is designed for extensibility. Planned agent additions:
+
+- **Referral Coordination Agent**: Manages specialist referral workflows, insurance authorization, and appointment coordination
+- **Medication Management Agent**: Handles prescription refill requests, prior authorization conversations, and medication education
+- **Care Navigation Agent**: Guides patients through complex care journeys spanning multiple providers and facilities

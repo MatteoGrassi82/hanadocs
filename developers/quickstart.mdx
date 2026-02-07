@@ -1,0 +1,265 @@
+---
+title: "Quickstart"
+description: "Get HANA running in your environment in under 30 minutes. Two paths: direct integration or SDK."
+---
+
+## Choose Your Integration Path
+
+<CardGroup cols={2}>
+  <Card title="HANA Direct" icon="plug" href="#hana-direct">
+    You're a clinic or health organization. You want HANA to engage your patients directly. We configure agents for your workflows and connect to your EHR.
+  </Card>
+  <Card title="HANA Connect (SDK)" icon="code" href="#hana-connect-sdk">
+    You're a digital health platform, EHR vendor, or technology partner. You want to embed HANA's engagement capabilities into your product.
+  </Card>
+</CardGroup>
+
+---
+
+## HANA Direct
+
+For clinics and health organizations deploying HANA as their engagement layer.
+
+### Step 1: Provide Your Patient Roster
+
+Send us your patient roster via secure file transfer or API. Minimum required fields:
+
+```json
+{
+  "patients": [
+    {
+      "patient_id": "P-12345",
+      "first_name": "Maria",
+      "last_name": "Garcia",
+      "phone": "+1-555-0123",
+      "preferred_channel": "voice",
+      "preferred_language": "en",
+      "active_diagnoses": ["E11.9"],
+      "medications": ["metformin 500mg"]
+    }
+  ]
+}
+```
+
+### Step 2: Define Your Protocol
+
+Upload your care protocol as a PDF, Google Doc, or structured JSON. HANA will configure agents to follow your protocol exactly.
+
+**Example protocol definition:**
+```json
+{
+  "protocol": {
+    "name": "Diabetes Medication Adherence",
+    "objective": "Monitor and improve medication adherence for Type 2 Diabetes patients",
+    "frequency": "weekly",
+    "channel_priority": ["voice", "sms"],
+    "questions": [
+      {
+        "topic": "medication_adherence",
+        "prompt": "How have you been doing with your medication this week?",
+        "follow_up_if": "non_adherent",
+        "follow_up": "What's been making it difficult?"
+      },
+      {
+        "topic": "side_effects",
+        "prompt": "Have you noticed any side effects?",
+        "follow_up_if": "yes",
+        "follow_up": "Can you describe what you're experiencing?"
+      }
+    ],
+    "escalation_rules": {
+      "critical": ["suicidality", "medical_emergency"],
+      "high": ["medication_adverse_event", "significant_mood_decline"],
+      "medium": ["non_adherence_3_consecutive", "mood_decline_trend"]
+    }
+  }
+}
+```
+
+Or simply send us your existing protocol documents (PDF, DOCX, or clinical guidelines) and we'll configure it for you.
+
+### Step 3: Connect Your EHR
+
+Choose your integration path:
+
+| Your EHR | Integration Path | Setup Time |
+|----------|-----------------|------------|
+| Athena Health | Via Redox | 2-4 weeks |
+| PracticeQ | Direct API | 1-2 weeks |
+| Charma | Direct API | 1-2 weeks |
+| Other (with API) | Via Catagon or direct | 2-6 weeks |
+| No EHR / Legacy | HANA Dashboard | 1 week |
+
+### Step 4: Test
+
+We'll provision a test environment where your clinical team can:
+- Call your configured agents as if they were a patient
+- Review generated clinical notes
+- Validate escalation pathways
+- Tune conversational style and tone
+
+### Step 5: Go Live
+
+Deploy to your pilot cohort (typically 50-100 patients). Monitor via the weekly KPI dashboard.
+
+---
+
+## HANA Connect (SDK)
+
+For platforms embedding HANA's engagement capabilities into their product.
+
+### Authentication
+
+All API requests require a Bearer token:
+
+```bash
+curl -X POST https://api.hana.health/v1/engagements \
+  -H "Authorization: Bearer hana_sk_live_..." \
+  -H "Content-Type: application/json"
+```
+
+<Note>
+API keys are provisioned during partner onboarding. Contact us to get started.
+</Note>
+
+### Step 1: Install the SDK
+
+<CodeGroup>
+```bash npm
+npm install @hana-health/sdk
+```
+```bash yarn
+yarn add @hana-health/sdk
+```
+```bash pip
+pip install hana-health
+```
+</CodeGroup>
+
+### Step 2: Initialize
+
+<CodeGroup>
+```javascript Node.js
+import { HanaClient } from '@hana-health/sdk';
+
+const hana = new HanaClient({
+  apiKey: process.env.HANA_API_KEY,
+  environment: 'production', // or 'sandbox'
+  region: 'eu' // or 'us'
+});
+```
+```python Python
+from hana_health import HanaClient
+
+hana = HanaClient(
+    api_key=os.environ["HANA_API_KEY"],
+    environment="production",
+    region="eu"
+)
+```
+</CodeGroup>
+
+### Step 3: Create an Engagement
+
+<CodeGroup>
+```javascript Node.js
+const engagement = await hana.engagements.create({
+  patient: {
+    id: 'P-12345',
+    phone: '+1-555-0123',
+    preferredChannel: 'voice',
+    language: 'en'
+  },
+  protocol: 'medication-adherence-diabetes',
+  triggerType: 'scheduled',
+  scheduledAt: '2026-02-08T10:00:00Z',
+  callbackUrl: 'https://your-app.com/webhooks/hana'
+});
+
+console.log(engagement.id); // "eng_abc123"
+console.log(engagement.status); // "scheduled"
+```
+```python Python
+engagement = hana.engagements.create(
+    patient={
+        "id": "P-12345",
+        "phone": "+1-555-0123",
+        "preferred_channel": "voice",
+        "language": "en"
+    },
+    protocol="medication-adherence-diabetes",
+    trigger_type="scheduled",
+    scheduled_at="2026-02-08T10:00:00Z",
+    callback_url="https://your-app.com/webhooks/hana"
+)
+
+print(engagement.id)  # "eng_abc123"
+print(engagement.status)  # "scheduled"
+```
+</CodeGroup>
+
+### Step 4: Receive Results via Webhook
+
+When the engagement completes, HANA posts results to your callback URL:
+
+```json
+{
+  "event": "engagement.completed",
+  "engagement_id": "eng_abc123",
+  "patient_id": "P-12345",
+  "status": "completed",
+  "outcome": {
+    "clinical_note": "Medication adherence: ~4/7 days. Barrier: cost (insurance change). Side effects: mild nausea, tolerable.",
+    "tasks": [
+      {
+        "type": "review_medication_assistance",
+        "priority": "medium",
+        "assigned_to": "care_manager"
+      }
+    ],
+    "risk_flags": [],
+    "risk_level": "low",
+    "metrics": {
+      "engagement_score": 0.92,
+      "completion_rate": 1.0,
+      "interaction_count": 8
+    }
+  },
+  "transcript_url": "https://api.hana.health/v1/engagements/eng_abc123/transcript"
+}
+```
+
+### Step 5: White-Label (Optional)
+
+Configure branding so patients experience your brand, not HANA's:
+
+```javascript
+const engagement = await hana.engagements.create({
+  // ... patient and protocol config
+  whiteLabel: {
+    callerName: "Your Health Platform",
+    callerId: "+1-555-YOUR-NUM",
+    smsFrom: "YourHealth",
+    voicePersonality: "warm-professional"
+  }
+});
+```
+
+## Sandbox Environment
+
+All integrations start in sandbox mode:
+- Test patients only (no real calls)
+- Full API parity with production
+- Simulated voice interactions for testing
+- Webhook delivery to your test endpoints
+
+```javascript
+const hana = new HanaClient({
+  apiKey: process.env.HANA_API_KEY,
+  environment: 'sandbox' // No real calls, full API testing
+});
+```
+
+<Card title="Next: API Reference" icon="book" href="/developers/api-reference">
+  Full API documentation for all HANA endpoints.
+</Card>

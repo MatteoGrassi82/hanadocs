@@ -1,0 +1,148 @@
+---
+title: "Data Residency"
+description: "HANA processes data where it needs to stay. Regional deployment, sovereign cloud, and on-premise options."
+---
+
+## Regional Deployment
+
+HANA's infrastructure is deployed regionally. When you select a region, all data processing — AI reasoning, patient interactions, clinical notes, audit logs — stays within that region.
+
+This is an architectural guarantee, not a policy promise. The systems are physically separate.
+
+### Available Regions
+
+| Region Code | Location | Compliance | Status |
+|------------|----------|------------|--------|
+| `us-east` | United States (East) | HIPAA | ✅ Production |
+| `eu-west` | European Union (Ireland) | GDPR | ✅ Production |
+| `eu-south` | European Union (Italy) | GDPR + Garante | ✅ Production |
+| `uk` | United Kingdom | UK GDPR | ✅ Production |
+| `on-premise` | Your infrastructure | Your policies | 🔄 Pilot |
+| `me` | Middle East (Sovereign Cloud) | Regional sovereign | 🔄 Pilot |
+
+### Region Selection
+
+Region is configured at the organization level and cannot be changed after deployment:
+
+```javascript
+const hana = new HanaClient({
+  apiKey: process.env.HANA_API_KEY,
+  region: 'eu-west' // Data stays in EU-West (Ireland)
+});
+```
+
+<Warning>
+Region cannot be changed after initial deployment without a data migration process. Choose carefully during onboarding.
+</Warning>
+
+---
+
+## What Stays in Region
+
+Everything:
+
+| Data Type | In-Region |
+|-----------|-----------|
+| Patient demographics | ✅ |
+| Clinical data (diagnoses, medications) | ✅ |
+| Conversation transcripts | ✅ |
+| Voice recordings (where enabled) | ✅ |
+| Clinical notes (generated) | ✅ |
+| AI model inference | ✅ |
+| Reasoning engine computations | ✅ |
+| Audit logs | ✅ |
+| API request logs | ✅ |
+| Encryption keys | ✅ |
+
+### What Does NOT Cross Regions
+
+- Patient data never crosses regional boundaries
+- AI model inference runs on regional compute
+- No data is sent to third-party AI providers (OpenAI, Anthropic, etc.)
+- Backup replication stays within the same geographic region
+
+---
+
+## Sovereign & On-Premise Deployment
+
+For organizations requiring maximum data control, HANA supports deployment on your own infrastructure.
+
+### On-Premise Architecture
+
+```
+┌──────────────────────────────────────────────────┐
+│  Your Data Center / Private Cloud                │
+│                                                  │
+│  ┌──────────────┐  ┌──────────────┐              │
+│  │ HANA         │  │ HANA         │              │
+│  │ Reasoning    │  │ Voice/SMS    │              │
+│  │ Engine       │  │ Engine       │              │
+│  └──────────────┘  └──────────────┘              │
+│                                                  │
+│  ┌──────────────┐  ┌──────────────┐              │
+│  │ Database     │  │ Audit        │              │
+│  │ (encrypted)  │  │ Logs         │              │
+│  └──────────────┘  └──────────────┘              │
+│                                                  │
+│  Zero data egress. Everything runs here.         │
+└──────────────────────────────────────────────────┘
+```
+
+### Requirements
+
+| Component | Minimum Spec |
+|-----------|-------------|
+| Compute | 8 vCPUs, 32GB RAM (reasoning engine) |
+| GPU | NVIDIA A10G or equivalent (voice model inference) |
+| Storage | 500GB SSD |
+| Network | Internal network access to EHR systems |
+| OS | Linux (Ubuntu 22.04+ or RHEL 8+) |
+
+### Licensing
+
+On-premise deployments are licensed per-installation:
+- Annual license fee
+- Includes updates and model improvements
+- Remote support and monitoring (optional, requires secure tunnel)
+
+### Current Pilots
+
+| Organization | Region | Use Case |
+|-------------|--------|----------|
+| Hospital system (Italy) | EU | HIV patient engagement |
+| Sovereign cloud (Middle East) | ME | National health engagement |
+
+---
+
+## Data Retention
+
+Default retention periods:
+
+| Data Type | Retention |
+|-----------|----------|
+| Conversation transcripts | 7 years |
+| Clinical notes | 7 years |
+| Audit logs | 7 years |
+| Voice recordings | 90 days (configurable) |
+| Patient memory/preferences | Until patient deletion or org offboarding |
+
+Retention periods are configurable per organization. Data deletion is available via API or dashboard.
+
+### Right to Erasure (GDPR)
+
+For GDPR regions, patient data can be fully deleted:
+
+```bash
+DELETE /v1/patients/{patient_id}?erase=true
+```
+
+This removes all patient data including:
+- Demographics and clinical data
+- Engagement history and transcripts
+- Clinical notes
+- Memory and preference data
+- Audit logs (anonymized, not deleted, per regulatory requirement)
+
+<Card title="Back to Security Overview" icon="shield-check" href="/security/overview">
+  Full security and compliance documentation.
+</Card>

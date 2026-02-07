@@ -1,0 +1,133 @@
+---
+title: "Deployment"
+description: "Cloud, on-premise, and sovereign deployment options. HANA runs where your data needs to live."
+---
+
+## Deployment Models
+
+Because HANA runs its own models on its own infrastructure (no dependency on OpenAI, Anthropic, or other third-party model providers), we can deploy wherever your data residency requirements demand.
+
+<CardGroup cols={3}>
+  <Card title="Cloud (Managed)" icon="cloud">
+    HANA-hosted infrastructure with region-specific data residency. The default for most deployments.
+  </Card>
+  <Card title="On-Premise" icon="server">
+    HANA installed on your servers. Full data isolation. Currently piloting in Italy and the Middle East.
+  </Card>
+  <Card title="Sovereign Cloud" icon="shield-halved">
+    Deployed within government-approved sovereign cloud environments. Required for certain public sector contracts.
+  </Card>
+</CardGroup>
+
+## Cloud (Managed)
+
+The standard deployment model. HANA manages all infrastructure, scaling, updates, and monitoring.
+
+**How it works:**
+- HANA runs on dedicated cloud infrastructure (not shared tenancy)
+- Data is stored in region-locked environments (EU or US, configurable)
+- No cross-border data transfer
+- All models run on HANA-controlled compute
+- Automatic updates and scaling handled by HANA engineering
+
+**Best for:** Private clinics, behavioral health practices, digital health partners, FQHCs
+
+**EHR integration:** Via Redox, Catagon, or direct API depending on EHR system
+
+| Property | Detail |
+|----------|--------|
+| Data residency | EU (Ireland) or US (configurable) |
+| Encryption | AES-256 at rest, TLS 1.3 in transit |
+| SLA | 99.9% uptime |
+| BAA | Available |
+| Setup time | 2-4 weeks (standard EHRs) |
+
+## On-Premise
+
+For organizations that require all data and compute to remain within their own network boundary.
+
+**How it works:**
+- HANA's full model stack is installed on the organization's servers
+- Licensed on an annual or per-deployment basis
+- HANA provides installation support, initial configuration, and training
+- Updates delivered as versioned packages (not automatic push)
+
+**Currently piloting:**
+- **Italy** — Large hospital system for HIV patient monitoring (mainframe-based infrastructure)
+- **Middle East** — Sovereign cloud alignment with regional data sovereignty requirements
+
+**Best for:** Large health systems, government healthcare, organizations with strict data sovereignty mandates, environments using legacy infrastructure (mainframes)
+
+| Property | Detail |
+|----------|--------|
+| Data residency | Your servers, your network |
+| Model hosting | Installed locally, no external API calls |
+| Encryption | Configurable to org policy |
+| Updates | Versioned releases, manual deployment |
+| Setup time | 4-8 weeks depending on environment |
+
+<Warning>
+On-premise deployments require dedicated engineering engagement for installation and configuration. Please contact the HANA team to scope your environment.
+</Warning>
+
+## Sovereign Cloud
+
+For public sector and government contracts requiring deployment within certified sovereign cloud environments.
+
+**How it works:**
+- HANA is deployed within government-approved cloud infrastructure
+- Compliant with national data sovereignty regulations
+- Isolated from HANA's commercial cloud infrastructure
+- Managed in partnership with the sovereign cloud provider
+
+**Active government engagements:**
+- **Ireland HSE** — Palliative care pilot covering 1.5 million lives
+- **Italian regional health systems** — Budget allocated for multi-center deployment
+
+**Best for:** Government health services, national health systems, military health, public sector mandates
+
+## EHR Integration Across Deployments
+
+Regardless of deployment model, HANA integrates with EHR systems through multiple pathways:
+
+| Integration Path | Supported EHRs | Notes |
+|-----------------|----------------|-------|
+| **Redox** | Athena Health, Epic, Cerner, 150+ | Standard connector, platform fee applies |
+| **Catagon** | Multiple (acts as Zapier for EHRs) | Flexible, good for multi-EHR environments |
+| **Direct API** | Charma, PracticeQ, custom systems | Fastest setup, no middleware cost |
+| **Custom dashboard** | Any (standalone) | For clinics without modern EHR or with legacy systems |
+| **MCP Server** | Cloud-based workflows | Currently building MCP connectors for cloud integration |
+
+<Note>
+If your organization uses eClinicalWorks or another EHR that doesn't expose APIs, direct integration is not currently possible. We can provide a standalone dashboard as a workaround. This limitation applies to all vendors, not just HANA.
+</Note>
+
+## Environment Requirements
+
+### Cloud (Managed)
+No requirements on your side. HANA manages everything.
+
+### On-Premise
+- Linux-based server environment (Ubuntu 22.04+ or RHEL 8+)
+- GPU compute: NVIDIA A100 or equivalent (for model inference)
+- Minimum 64GB RAM, 500GB SSD storage
+- Network: outbound HTTPS for telephony/SMS providers (or on-premise telephony gateway)
+- Container runtime: Docker or Kubernetes
+
+### Sovereign Cloud
+- Approved cloud provider (e.g., AWS GovCloud, Azure Government, OVHcloud, Scaleway)
+- Configuration scoped per contract
+
+## Deployment Timeline
+
+| Model | Typical Timeline | Notes |
+|-------|-----------------|-------|
+| Cloud + standard EHR (Athena, PracticeQ) | 2-4 weeks | Fastest path |
+| Cloud + Redox connector | 4-6 weeks | Includes Redox onboarding |
+| Cloud + custom EHR | 4-8 weeks | Requires API scoping |
+| On-premise | 6-12 weeks | Includes installation + testing |
+| Sovereign cloud | 8-16 weeks | Includes compliance validation |
+
+<Card title="Next: Data Architecture" icon="database" href="/infrastructure/data-architecture">
+  How HANA handles data flow, storage, privacy-by-design, and the bidirectional EHR integration that makes it infrastructure, not an app.
+</Card>

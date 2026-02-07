@@ -1,0 +1,214 @@
+---
+title: "Enterprise Guide"
+description: "Enterprise deployment guide for HANA: multi-tenant architecture, advanced EHR integration, and organization-wide rollout strategies."
+---
+
+## Enterprise Overview
+
+HANA is built for enterprise healthcare organizations — multi-site health systems, large physician groups, behavioral health networks, and payer-provider organizations that need patient engagement at scale.
+
+This guide covers enterprise-specific deployment considerations, including multi-tenant configuration, advanced EHR integration patterns, organizational rollout strategies, and enterprise security requirements.
+
+## What HANA Does for Enterprise
+
+HANA helps enterprise organizations:
+
+- **Scale patient outreach** without scaling headcount — automate hundreds of thousands of patient conversations monthly
+- **Standardize engagement quality** across sites, departments, and providers
+- **Capture structured clinical data** from patient conversations directly into the EHR
+- **Generate revenue** through BHI, CCM, and care gap closure billing
+- **Reduce operational costs** by automating repetitive phone-based workflows
+
+## Getting Started
+
+**1. Establish Sponsorship**
+
+Successful enterprise deployments require alignment across three stakeholders:
+- **Clinical leadership**: Validates protocols, approves clinical workflows
+- **IT/Integration**: Provides EHR API access, security review
+- **Operations**: Defines priority use cases, measures ROI
+
+**2. Choose Your Integration Path**
+
+| Approach | Best For | Timeline |
+|----------|---------|----------|
+| API-first | Organizations with strong IT teams who want programmatic control | 2-3 weeks |
+| Managed deployment | Organizations that want HANA to handle configuration end-to-end | 3-4 weeks |
+| White-label embed | Platform partners who want HANA inside their own product | 4-6 weeks |
+
+**3. Define Initial Scope**
+
+Start narrow, prove value, then expand:
+- Select 1-2 high-impact protocols (e.g., no-show follow-up, chronic care check-in)
+- Deploy at 1-2 pilot sites
+- Measure for 30-60 days
+- Expand based on results
+
+## Multi-Tenant Architecture
+
+Enterprise organizations with multiple sites, departments, or brands deploy HANA in a multi-tenant configuration:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   ENTERPRISE TENANT MODEL                     │
+│                                                               │
+│  Organization: Acme Health System                             │
+│  ├── Tenant: Acme Primary Care (15 locations)                │
+│  │   ├── Protocols: Annual wellness, CCM, medication review  │
+│  │   ├── EHR: Epic (shared instance)                         │
+│  │   └── Voice: "Acme Primary Care" branding                 │
+│  │                                                            │
+│  ├── Tenant: Acme Behavioral Health (8 locations)            │
+│  │   ├── Protocols: BHI intake, PHQ-9 follow-up, SBIRT      │
+│  │   ├── EHR: Epic (shared instance, BH module)             │
+│  │   └── Voice: "Acme Behavioral Health" branding            │
+│  │                                                            │
+│  └── Tenant: Acme Urgent Care (12 locations)                 │
+│      ├── Protocols: Post-visit follow-up, satisfaction       │
+│      ├── EHR: Athenahealth (separate instance)               │
+│      └── Voice: "Acme Urgent Care" branding                  │
+│                                                               │
+│  Shared: SSO, billing, analytics rollup, admin console       │
+│  Isolated: Patient data, conversation logs, protocols         │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Tenant Isolation
+
+- **Data isolation**: Patient data never crosses tenant boundaries
+- **Configuration isolation**: Each tenant has independent protocols, voice settings, and escalation rules
+- **Network isolation**: Tenant-specific encryption keys and access controls
+- **Audit isolation**: Complete audit trail per tenant for compliance
+
+### Shared Enterprise Services
+
+- **Single sign-on**: Enterprise SSO (SAML/OIDC) across all tenants
+- **Unified billing**: Single invoice with per-tenant breakdown
+- **Rollup analytics**: Enterprise-wide dashboards with drill-down to tenant/site level
+- **Centralized admin**: Enterprise administrators manage tenant creation, user provisioning, and policy enforcement
+
+## Advanced EHR Integration
+
+### Supported Integration Patterns
+
+| Pattern | Description | Use Case |
+|---------|------------|----------|
+| **Real-time FHIR** | Live read/write via FHIR R4 APIs | Patient data retrieval, appointment booking, clinical write-back |
+| **Batch FHIR** | Scheduled bulk data exchange | Patient panel loading, care gap list generation |
+| **ADT feeds** | HL7v2 ADT messages | Real-time admission/discharge/transfer notifications |
+| **CCD/C-CDA** | Document exchange | Comprehensive patient summary import |
+| **Custom API** | Organization-specific REST endpoints | Non-standard EHR or ancillary systems |
+
+### Data Flow Architecture
+
+```
+┌──────────┐     FHIR R4      ┌──────────┐     Processed     ┌──────────┐
+│          │ ◀──────────────▶ │          │ ───────────────▶  │          │
+│   EHR    │                  │   HANA   │                   │ Reasoning│
+│  System  │     HL7v2        │  Gateway │ ◀───────────────  │  Engine  │
+│          │ ◀──────────────  │          │    Conversation   │          │
+│          │                  │          │    Outcomes        │          │
+└──────────┘                  └──────────┘                   └──────────┘
+                                   │
+                                   │ Write-back
+                                   ▼
+                              ┌──────────┐
+                              │   EHR    │
+                              │ Clinical │
+                              │  Notes   │
+                              └──────────┘
+```
+
+### EHR Write-Back Capabilities
+
+| Data Type | Supported EHRs | Write Method |
+|-----------|---------------|-------------|
+| Clinical notes | Epic, Cerner, Athena, AllScripts | FHIR DocumentReference |
+| Screening scores | Epic, Cerner, Athena | FHIR Observation |
+| Appointments | Epic, Cerner, Athena, DrChrono | FHIR Appointment |
+| Patient demographics | All FHIR-enabled | FHIR Patient |
+| Medications (reported) | Epic, Cerner | FHIR MedicationStatement |
+| Allergies (reported) | Epic, Cerner | FHIR AllergyIntolerance |
+| Task/follow-up | Epic, Cerner | FHIR Task |
+
+## Enterprise Security
+
+### Authentication and Access
+
+- **SSO integration**: SAML 2.0 and OIDC support for all major identity providers
+- **Multi-factor authentication**: Required for all administrative access
+- **Role-based access control**: Granular permissions by role (admin, clinical lead, coordinator, viewer)
+- **Session management**: Configurable session timeout and concurrent session limits
+- **IP allowlisting**: Optional restriction of admin access to approved networks
+
+### Compliance
+
+| Certification | Status | Scope |
+|--------------|--------|-------|
+| SOC 2 Type II | Active | Security, availability, confidentiality |
+| HIPAA | Compliant | Full compliance with BAA |
+| GDPR | Compliant | EU data protection |
+| HITRUST | In progress | CSF certification |
+
+### Enterprise BAA
+
+HANA executes a Business Associate Agreement with every healthcare organization before processing any patient data. The BAA covers:
+
+- All patient data processed through HANA's platform
+- Conversation recordings and transcripts
+- Structured clinical data extracted from conversations
+- Integration data exchanged with EHR systems
+
+## Enterprise Rollout Strategy
+
+### Recommended Phased Approach
+
+**Phase 1: Pilot (Month 1-2)**
+- 1-2 protocols at 1-2 sites
+- 500-2,000 patient conversations
+- Focus: Prove clinical accuracy and patient acceptance
+- Success gate: > 70% completion rate, > 4.0 patient satisfaction
+
+**Phase 2: Expansion (Month 3-4)**
+- Add 2-3 protocols, expand to 5-10 sites
+- 5,000-20,000 patient conversations
+- Focus: Validate operational integration and ROI
+- Success gate: Measurable staff time savings, positive clinical feedback
+
+**Phase 3: Scale (Month 5-8)**
+- Full protocol library, all sites
+- 50,000+ patient conversations monthly
+- Focus: Maximize ROI, optimize quality
+- Success gate: Target ROI achieved, quality metrics stable
+
+**Phase 4: Advanced (Month 9+)**
+- Custom protocol development
+- Advanced analytics and population health insights
+- API integration for workflow automation
+- White-label options for patient-facing branding
+
+### Change Management
+
+HANA provides enterprise change management support:
+
+- **Executive briefing materials**: ROI projections, competitive positioning, risk mitigation
+- **Clinical staff communication templates**: How to explain AI-assisted outreach to clinical teams
+- **Patient communication materials**: Letters, emails, and FAQ for patient notification
+- **Training curriculum**: Role-specific training for all affected staff
+- **Go-live support**: Dedicated HANA team on-site or virtual during initial deployment
+
+## Enterprise Support
+
+| Support Level | Response Time | Channels | Included In |
+|--------------|---------------|----------|------------|
+| Standard | 4 business hours | Email, portal | All tiers |
+| Priority | 1 business hour | Email, portal, phone | Scale tier |
+| Enterprise | 30 minutes (critical) | Dedicated Slack, phone, on-call | Enterprise tier |
+
+Enterprise support includes:
+- Dedicated customer success manager
+- Quarterly business reviews
+- Priority access to new features and protocols
+- Custom protocol development support
+- Integration engineering assistance

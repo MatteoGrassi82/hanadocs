@@ -1,0 +1,198 @@
+---
+title: "Reasoning Engine"
+description: "How HANA's dual-model architecture separates clinical intelligence from real-time conversation delivery."
+---
+
+## The Core Problem with AI in Healthcare
+
+Most healthcare AI systems use a single model for everything: reasoning about clinical context, generating responses, and speaking to patients — all in real-time. This creates three problems:
+
+1. **Latency** — Complex reasoning takes time. Patients notice pauses.
+2. **Hallucination risk** — A model reasoning in real-time can generate clinically dangerous statements.
+3. **Protocol drift** — Without guardrails, conversations wander from clinical objectives.
+
+HANA solves this by splitting the intelligence into two separate models with distinct responsibilities.
+
+## Dual-Model Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    PRE-CALL PHASE                                │
+│                                                                  │
+│  ┌────────────────┐    ┌────────────────────────────────────┐   │
+│  │  Input Layers   │───▶│       REASONING ENGINE              │   │
+│  │                 │    │                                    │   │
+│  │ • EHR data      │    │  1. Analyze existing patient data  │   │
+│  │ • Memory layer  │    │  2. Identify information gaps      │   │
+│  │ • Protocols     │    │  3. Generate question set          │   │
+│  │ • Past calls    │    │  4. Determine optimal channel      │   │
+│  │ • Safety rules  │    │  5. Set escalation thresholds      │   │
+│  └────────────────┘    └──────────────┬─────────────────────┘   │
+│                                       │                          │
+│                          Question Set + Context                  │
+│                          Channel Decision                        │
+│                          Safety Parameters                       │
+│                                       │                          │
+├───────────────────────────────────────┼──────────────────────────┤
+│                    LIVE CALL PHASE    ▼                          │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │              CONVERSATIONAL AGENT                          │ │
+│  │                                                            │ │
+│  │  • Receives pre-computed question set                      │ │
+│  │  • Delivers questions conversationally (voice or text)     │ │
+│  │  • Handles natural dialogue flow                           │ │
+│  │  • Cannot deviate from bounded question space              │ │
+│  │  • Real-time safety monitoring active                      │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                    POST-CALL PHASE                               │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │              DOMAIN EXPERT SYNTHESIS                        │ │
+│  │                                                            │ │
+│  │  • Integrates conversation data with existing records      │ │
+│  │  • Generates structured clinical note                      │ │
+│  │  • Flags risks, barriers, and action items                 │ │
+│  │  • Writes back to EHR                                      │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+## The Five Input Layers
+
+The Reasoning Engine doesn't operate on a single prompt. It ingests data from five distinct layers before every patient interaction.
+
+### 1. EHR & Patient Data Layer
+
+Pulls structured clinical data from the integrated EHR system:
+- Demographics, diagnoses, medications
+- Lab results and vitals
+- Previous encounter notes
+- Upcoming appointments and referrals
+
+<Note>
+The Reasoning Engine reads the chart **before** calling the patient, so it never asks questions the clinic already has answers to. This is the "Low User Burden" principle in practice.
+</Note>
+
+### 2. Memory Layer
+
+Stores and retrieves interaction history across sessions:
+- Previous conversation summaries
+- Patient-reported preferences
+- Communication patterns (best time, preferred channel)
+- Historical response quality scores
+- Longitudinal trends (e.g., declining mood over 4 weeks)
+
+The Memory Layer is what enables HANA to build **therapeutic relationships** over time, not just handle transactions.
+
+### 3. Clinical Protocols Layer
+
+Contains the care logic that governs every interaction:
+- Institution-specific protocols (uploaded as PDFs, structured data, or via API)
+- Standardized instruments (PHQ-9, DIVA-5, GAD-7, etc.)
+- Branching logic (e.g., depression screening triggers different follow-up than anxiety)
+- Regulatory requirements per jurisdiction
+
+<Warning>
+HANA does not generate clinical protocols. It executes protocols defined by the clinical team. The AI adapts **how** protocols are delivered (timing, channel, conversational style) — never **what** clinical content is delivered.
+</Warning>
+
+### 4. Engagement & Personalization Layer
+
+Optimizes delivery based on what works for each individual patient:
+- **Channel preference**: Voice vs. SMS vs. WhatsApp (learned over time)
+- **Timing optimization**: Best day/time to reach this patient
+- **Language complexity**: Simple vs. technical (adapted per patient)
+- **Conversational style**: Direct vs. warm vs. motivational
+- **Cultural context**: Language, cultural norms, communication expectations
+
+### 5. Safety & Observability Layer
+
+Runs continuously during all interactions:
+- Real-time NLP classifiers for risk signals (self-harm, suicidality, acute distress)
+- Sentiment and prosody analysis for voice calls
+- Protocol compliance monitoring
+- Escalation trigger evaluation against clinic-defined thresholds
+
+## How a Single Interaction Works
+
+Here's the full lifecycle of one patient check-in call:
+
+<Steps>
+  <Step title="Trigger">
+    A scheduled check-in is due, or a device alert (e.g., elevated heart rate from a wearable) triggers an engagement event.
+  </Step>
+
+  <Step title="Data Ingestion">
+    The Reasoning Engine pulls the patient's current EHR data, reviews the Memory Layer for past interactions, and loads the applicable clinical protocol.
+  </Step>
+
+  <Step title="Gap Analysis">
+    The Data Science Agent identifies what information is missing, what's changed since the last interaction, and what the clinical team needs to know.
+  </Step>
+
+  <Step title="Question Generation">
+    The Reasoning Engine generates a bounded set of questions, ordered by clinical priority. It also determines the optimal channel (voice for complex history, SMS for quick confirmations).
+  </Step>
+
+  <Step title="Patient Engagement">
+    The Conversational Agent initiates contact via the selected channel. It delivers the pre-computed questions through natural dialogue, adapting tone and pacing to the patient's communication style.
+  </Step>
+
+  <Step title="Real-Time Safety">
+    Throughout the conversation, the Safety Layer monitors for risk signals. If a threshold is crossed, the system executes the clinic's defined escalation protocol (interrupt, route, notify).
+  </Step>
+
+  <Step title="Synthesis">
+    Post-call, the Domain Expert Agent synthesizes all gathered data into a structured clinical note — including new information, barrier reports, risk flags, and recommended actions.
+  </Step>
+
+  <Step title="Write-Back">
+    The structured note is written back to the EHR via the bidirectional integration. Tasks, flags, and escalations are routed to the appropriate clinical staff.
+  </Step>
+</Steps>
+
+## Model Stack
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Reasoning Engine** | Fine-tuned OSS model (self-hosted) | Pre-call analysis, question generation, clinical synthesis |
+| **Conversational Agent** | LLaMA 3.1 (self-hosted) | Low-latency voice and text interactions |
+| **Safety Classifiers** | Custom NLP models | Real-time risk detection and escalation |
+| **Speech-to-Text** | Proprietary + OSS hybrid | Multi-language transcription |
+| **Text-to-Speech** | Configurable voice engine | Natural-sounding voice delivery |
+
+<Info>
+All models run on HANA-controlled infrastructure. No patient data is sent to OpenAI, Anthropic, Google, or any third-party model provider. This is a hard architectural constraint, not a configuration option.
+</Info>
+
+## Why This Matters
+
+The dual-model approach creates properties that single-model systems can't achieve:
+
+| Property | Single-Model Systems | HANA Dual-Model |
+|----------|---------------------|-----------------|
+| Latency during calls | High (reasoning + speaking) | Low (pre-computed reasoning) |
+| Hallucination risk | Present during live interaction | Structurally eliminated from live calls |
+| Off-topic drift | Possible | Impossible (bounded question set) |
+| Clinical protocol adherence | Prompt-dependent | Architecture-enforced |
+| Personalization depth | Session-only | Longitudinal (Memory Layer) |
+| Safety monitoring | Post-hoc | Real-time + pre-validated |
+
+## Data Flywheel
+
+Every interaction improves the system:
+
+```
+More interactions → Better reasoning models → Better engagement
+→ More clinical data → Richer personalization → Higher adherence
+→ More clinics adopt → More interactions
+```
+
+HANA has processed **1,000,000+ patient interactions** across 5 countries and 3+ languages. This proprietary dataset is the primary technical moat — it cannot be replicated with off-the-shelf foundation models or synthetic data.
+
+<Card title="Next: Agent Design Patterns" icon="robot" href="/infrastructure/agent-design">
+  Learn how HANA agents are configured for different clinical use cases — from intake coordination to chronic care monitoring.
+</Card>

@@ -1,0 +1,154 @@
+---
+title: "Observability"
+description: "How HANA monitors interaction quality, safety compliance, and clinical outcomes across all deployments."
+---
+
+## Monitoring Philosophy
+
+Healthcare AI can't be a black box. Every interaction HANA has with a patient is monitored, scored, and auditable. Clinicians need to trust the system. Regulators need to audit it. And the engineering team needs to improve it.
+
+HANA's observability stack covers three layers:
+
+1. **Interaction Quality** — Is each conversation achieving its clinical objective?
+2. **Safety Compliance** — Are risk signals being detected and escalated correctly?
+3. **System Health** — Is the infrastructure performing reliably?
+
+## Interaction Scoring
+
+Every patient interaction is scored across multiple dimensions. HANA does not measure "conversations" or "minutes" — it measures **interactions**, where each interaction is a meaningful exchange unit (question asked + response received).
+
+### Scoring Dimensions
+
+| Dimension | What It Measures | How It's Scored |
+|-----------|-----------------|-----------------|
+| **Relevance** | Did the question address a clinical objective? | 1-5 scale, automated |
+| **Completeness** | Did the patient provide sufficient information? | Binary + depth score |
+| **Safety** | Were risk signals present? Were they handled correctly? | Pass/fail + severity |
+| **Engagement** | Did the patient remain engaged throughout? | Drop-off analysis |
+| **Protocol Adherence** | Did the agent follow the defined clinical protocol? | Automated compliance check |
+
+### Quality Metrics Dashboard
+
+Clinics and partners receive weekly reporting on:
+
+- **Contact rate**: % of patients successfully reached
+- **Engagement rate**: % of patients who completed the interaction
+- **Completion rate**: % of required data points captured
+- **Response time**: Time from first contact to completed interaction
+- **Escalation rate**: % of interactions triggering clinical escalation
+- **Patient satisfaction**: Post-interaction feedback (where collected)
+
+## Safety Monitoring
+
+### Real-Time Risk Detection
+
+During every interaction, NLP classifiers continuously monitor for:
+
+| Risk Signal | Detection Method | Response |
+|------------|-----------------|----------|
+| Suicidal ideation | Semantic analysis + keyword detection | Immediate escalation per clinic protocol |
+| Self-harm | Semantic analysis + contextual reasoning | Immediate escalation per clinic protocol |
+| Acute distress | Sentiment analysis + prosody (voice) | Escalation or adapted conversation flow |
+| Medication emergency | Structured extraction (overdose indicators) | Clinical alert + recommended action |
+| Abuse/neglect indicators | Contextual NLP analysis | Flagged for clinical review |
+
+<Warning>
+HANA is not a crisis hotline. When acute risk is detected, the system executes the clinic's defined escalation protocol — which may include interrupting the call, connecting to an emergency service, or alerting on-call clinical staff. HANA does not provide crisis counseling.
+</Warning>
+
+### Escalation Protocol Engine
+
+Each clinic defines its own escalation rules. HANA executes them exactly as configured:
+
+```yaml
+escalation_policy:
+  name: "clinic-xyz-risk-protocol"
+  rules:
+    - trigger: "suicidality_detected"
+      severity: "critical"
+      actions:
+        - interrupt_call
+        - message: "I'm an AI assistant. I want to make sure you're safe. Please contact [emergency_number] or go to your nearest emergency room."
+        - notify: "on_call_clinician"
+        - log: "critical_incident"
+
+    - trigger: "medication_concern"
+      severity: "high"
+      actions:
+        - complete_current_question
+        - flag: "medication_review_needed"
+        - notify: "care_manager"
+        - schedule_followup: "24_hours"
+
+    - trigger: "mood_decline_trend"
+      severity: "medium"
+      actions:
+        - adjust_check_in_frequency: "increase"
+        - flag: "mood_trend_review"
+        - include_in_weekly_report: true
+```
+
+### Safety Track Record
+
+| Metric | Value |
+|--------|-------|
+| Total patient interactions | 1,000,000+ |
+| Critical adverse events | **0** |
+| Risk signals detected and escalated | Thousands (specific count varies by deployment) |
+| False negative rate on critical risk | Continuously monitored, target < 0.1% |
+
+## Audit Trail
+
+Every action HANA takes is logged and auditable:
+
+| Event | Logged Data |
+|-------|------------|
+| Patient contact initiated | Timestamp, channel, trigger reason, agent configuration |
+| Question delivered | Question text, protocol reference, personalization parameters |
+| Patient response received | Response text, sentiment score, risk classification |
+| Escalation triggered | Trigger signal, severity, actions taken, notifications sent |
+| Clinical note generated | Note content, data sources, confidence scores |
+| EHR write-back completed | Destination system, fields written, confirmation |
+| System error | Error type, affected component, recovery action |
+
+All audit logs are:
+- Immutable (append-only storage)
+- Encrypted at rest
+- Retained for minimum 7 years (configurable per policy)
+- Exportable for regulatory review
+
+## System Health Monitoring
+
+### Infrastructure Metrics
+
+| Metric | Target | Alerting |
+|--------|--------|----------|
+| API uptime | 99.9% | PagerDuty alert < 99.5% |
+| Voice call quality (MOS) | > 4.0 | Alert on degradation |
+| Model inference latency | < 500ms (conversational agent) | Alert > 1s |
+| EHR write-back success rate | > 99% | Alert on failure |
+| Message delivery rate | > 98% | Alert on carrier issues |
+
+### Reporting Cadence
+
+| Report | Frequency | Audience |
+|--------|-----------|----------|
+| KPI dashboard | Real-time | Clinical team |
+| Weekly summary | Weekly | Clinic leadership |
+| Steering committee report | Bi-weekly (during pilots) | Joint stakeholders |
+| Safety report | Monthly | Compliance officer |
+| System health report | Monthly | Technical team |
+
+## Continuous Improvement Loop
+
+Observability data feeds back into system improvement:
+
+1. **Interaction scoring** identifies low-performing question patterns → protocol refinement
+2. **Safety monitoring** identifies edge cases → classifier retraining
+3. **Engagement metrics** identify channel/timing patterns → personalization improvement
+4. **Clinician feedback** on generated notes → synthesis model refinement
+5. **Patient feedback** on conversation quality → conversational style tuning
+
+<Card title="Next: Developer Quickstart" icon="rocket" href="/developers/quickstart">
+  Get started integrating HANA into your application or clinical workflow.
+</Card>

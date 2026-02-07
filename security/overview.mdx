@@ -1,0 +1,223 @@
+---
+title: "Security & Compliance"
+description: "HANA is built for healthcare. Here's how we protect patient data, meet regulatory requirements, and maintain clinical safety."
+---
+
+## Security Principles
+
+HANA is healthcare infrastructure. Security isn't a feature — it's the foundation everything is built on. Three principles guide every architectural decision:
+
+1. **Data stays where it needs to stay.** Regional deployment means patient data never leaves the jurisdiction where it was collected.
+2. **No one sees what they shouldn't.** Organization-level isolation, encryption at rest and in transit, and strict access controls.
+3. **AI actions are auditable.** Every patient interaction, reasoning decision, and clinical note is logged and traceable.
+
+---
+
+## Regulatory Compliance
+
+### HIPAA (United States)
+
+| Requirement | How HANA Meets It |
+|------------|-------------------|
+| PHI Encryption | AES-256 at rest, TLS 1.3 in transit |
+| Access Controls | Role-based access, organization-scoped API keys |
+| Audit Trails | Complete interaction logs with timestamps |
+| BAA | Business Associate Agreement executed with all customers |
+| Minimum Necessary | Reasoning engine only accesses data relevant to the engagement protocol |
+| SMS Compliance | HIPAA-compliant SMS gateway for US deployments |
+
+### GDPR (European Union)
+
+| Requirement | How HANA Meets It |
+|------------|-------------------|
+| Data Residency | EU data processed on EU-hosted servers only |
+| Lawful Basis | Legitimate interest for care delivery; explicit consent for research |
+| Right to Erasure | Patient data deletion via API or dashboard |
+| Data Minimization | Only data required for the active protocol is accessed |
+| DPA | Data Processing Agreement executed with all EU customers |
+| No Cross-Border Transfer | Data does not leave the EU region |
+
+### Country-Specific
+
+HANA adapts to local regulatory requirements across deployment regions:
+
+| Region | Framework | Status |
+|--------|-----------|--------|
+| United States | HIPAA | ✅ Compliant |
+| European Union | GDPR | ✅ Compliant |
+| United Kingdom | UK GDPR + DPA 2018 | ✅ Compliant |
+| Ireland (HSE) | HSE Data Protection Standards | ✅ Active deployment |
+| Italy | GDPR + Garante guidelines | ✅ Active deployment |
+| Middle East | Sovereign cloud requirements | 🔄 In progress |
+
+---
+
+## Data Architecture
+
+### Encryption
+
+All patient data is encrypted at every stage:
+
+| Stage | Encryption Standard |
+|-------|-------------------|
+| In transit | TLS 1.3 (minimum TLS 1.2) |
+| At rest | AES-256 |
+| Backups | AES-256 with separate key management |
+| API keys | Hashed with bcrypt, never stored in plaintext |
+
+### Data Isolation
+
+Each organization's data is fully isolated:
+
+```
+Organization A                    Organization B
+├── Patients (A only)             ├── Patients (B only)
+├── Engagements (A only)          ├── Engagements (B only)
+├── Clinical Notes (A only)       ├── Clinical Notes (B only)
+├── Protocols (A only)            ├── Protocols (B only)
+└── Audit Logs (A only)           └── Audit Logs (B only)
+```
+
+Cross-organization data access is architecturally impossible — not just restricted by policy.
+
+### Data Residency
+
+HANA runs on region-locked infrastructure. When you choose a deployment region, all data processing stays within that region:
+
+| Region | Infrastructure | Data Stays In |
+|--------|---------------|--------------|
+| `us` | US-based servers | United States |
+| `eu` | EU-based servers | European Union |
+| `uk` | UK-based servers | United Kingdom |
+| `on-premise` | Your servers | Your facility |
+
+```javascript
+const hana = new HanaClient({
+  apiKey: process.env.HANA_API_KEY,
+  region: 'eu' // All data stays in EU
+});
+```
+
+---
+
+## AI-Specific Security
+
+### No Third-Party Model Dependencies
+
+HANA runs its own models on its own servers. Patient data is **never** sent to OpenAI, Anthropic, Google, or any third-party AI provider.
+
+| Component | What Runs It |
+|-----------|-------------|
+| Reasoning Engine | HANA proprietary model (OSS-based, self-hosted) |
+| Voice Agent | Llama 3.1 (self-hosted) |
+| Voice Synthesis | Self-hosted TTS |
+| Transcription | Self-hosted ASR |
+
+This is a core architectural decision — not a configuration option. It means:
+- No patient data leaves HANA's infrastructure
+- No dependency on third-party AI provider terms of service
+- Full control over model behavior and updates
+- Compliance with data residency requirements
+
+### Conversation Guardrails
+
+Every patient interaction is monitored in real-time by safety classifiers:
+
+| Guardrail | What It Does |
+|-----------|-------------|
+| Risk detection | NLP classifiers monitor for self-harm, suicidality, acute distress |
+| Topic boundaries | Agent stays within defined clinical protocol |
+| Escalation triggers | Automatic handoff to humans when safety thresholds are crossed |
+| Hallucination prevention | Pre-computed question sets prevent the agent from improvising clinical advice |
+| Audit trail | Every interaction turn is logged with reasoning context |
+
+### Human-in-the-Loop Safety
+
+HANA does not operate autonomously. The safety architecture ensures human oversight:
+
+1. **Protocol definition** — Clinicians define what the AI should and shouldn't discuss
+2. **Real-time monitoring** — Safety classifiers run during every conversation
+3. **Automatic escalation** — Risk signals immediately pause AI and route to humans
+4. **Post-interaction review** — Clinical notes are available for clinician review before action
+5. **Override capability** — Care teams can pause, modify, or cancel any engagement at any time
+
+<Note>
+HANA has managed over 1 million patient interactions with **zero critical adverse events**. Safety is validated across psychiatric, palliative, chronic care, and surgical populations.
+</Note>
+
+---
+
+## Access Controls
+
+### API Key Scoping
+
+API keys are scoped by organization and permission level:
+
+| Scope | Permissions |
+|-------|-----------|
+| `full_access` | Create/read/update/delete all resources |
+| `engagements_only` | Create/read engagements, receive webhooks |
+| `read_only` | Read-only access to all resources |
+
+### Dashboard Access
+
+The HANA clinical dashboard supports role-based access:
+
+| Role | Can Do |
+|------|--------|
+| Admin | Full configuration, user management, protocol editing |
+| Clinician | View patient engagements, review notes, manage escalations |
+| Viewer | Read-only access to dashboards and reports |
+
+---
+
+## Audit & Logging
+
+Every action in HANA is logged:
+
+| Event Type | What's Logged |
+|-----------|-------------|
+| Patient interaction | Full conversation transcript, reasoning decisions, outcome |
+| API access | Endpoint, method, requester, timestamp, response code |
+| Configuration change | What changed, who changed it, when |
+| Escalation | Trigger reason, actions taken, resolution |
+| Data access | Which patient data was accessed, by what process, when |
+
+Audit logs are retained for a minimum of 7 years (configurable per organization).
+
+```bash
+# Query audit logs via API
+GET /v1/audit-logs?resource_type=engagement&from=2026-01-01&to=2026-02-07
+```
+
+---
+
+## Incident Response
+
+HANA maintains a documented incident response plan:
+
+| Severity | Response Time | Example |
+|----------|--------------|---------|
+| Critical (P1) | 15 minutes | Patient safety event, data breach |
+| High (P2) | 1 hour | Service outage, integration failure |
+| Medium (P3) | 4 hours | Degraded performance, non-critical bug |
+| Low (P4) | 24 hours | Minor UI issue, documentation error |
+
+Customers are notified immediately for P1/P2 incidents via their configured contact channels.
+
+---
+
+## On-Premise Deployment
+
+For organizations requiring maximum control, HANA supports on-premise installation:
+
+- HANA's models and infrastructure run entirely on your servers
+- No data leaves your network
+- Licensed on a per-deployment basis
+- Currently being piloted in Italy (hospital setting) and Middle East (sovereign cloud)
+
+See [Deployment Options](/infrastructure/deployment) for technical details.
+
+<Card title="Next: Data Residency" icon="globe" href="/security/data-residency">
+  Regional deployment options and data sovereignty controls.
+</Card>

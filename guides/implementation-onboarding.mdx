@@ -1,0 +1,198 @@
+---
+title: "Implementation & Onboarding"
+description: "HANA's 5-phase implementation methodology: from discovery to production in 30 days with minimal disruption to clinical operations."
+---
+
+## Designed for Fast Adoption
+
+Healthcare organizations have limited patience for long implementation cycles. Every week of delayed deployment is a week of missed patient engagement, unrealized revenue, and continued manual workflow burden.
+
+HANA's implementation framework is built around a 30-day deployment cycle with five structured phases. No hardware to install, no IT infrastructure changes, and minimal staff training required.
+
+## 5-Phase Implementation
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    30-DAY IMPLEMENTATION                          │
+│                                                                   │
+│  Week 1          Week 2          Week 3          Week 4          │
+│  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐     │
+│  │DISCOVERY │    │ CONFIG  │    │ TESTING │    │ DEPLOY  │     │
+│  │& PLANNING│    │& INTEG. │    │& VALID. │    │& TRAIN  │     │
+│  │          │    │         │    │         │    │         │     │
+│  │Days 1-5  │    │Days 6-15│    │Days 16-25│   │Days 26-30│    │
+│  └─────────┘    └─────────┘    └─────────┘    └─────────┘     │
+│                                                                   │
+│                        ┌─────────────────┐                       │
+│                        │  PHASE 5:        │                      │
+│                        │  OPTIMIZATION    │                      │
+│                        │  (Ongoing)       │                      │
+│                        └─────────────────┘                       │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Phase 1: Discovery & Planning (Days 1-5)
+
+**Objective:** Understand the organization's workflows, identify highest-impact use cases, and define success criteria.
+
+**Activities:**
+- Clinical workflow mapping: Document current patient engagement processes, pain points, and bottlenecks
+- EHR system assessment: Identify EHR platform, available APIs, and integration requirements
+- Use case prioritization: Select initial deployment scope (typically 1-2 protocols)
+- Success metrics definition: Agree on KPIs for the pilot (completion rates, patient satisfaction, staff time savings)
+- Implementation roadmap: Detailed timeline with milestones and responsible parties
+
+**Deliverables:**
+- Workflow analysis document
+- Integration requirements specification
+- Prioritized use case list with expected impact
+- Pilot success criteria and measurement plan
+
+**Organization effort required:** 8-12 hours of stakeholder time (clinical lead, IT lead, operations lead)
+
+### Phase 2: Configuration & Integration (Days 6-15)
+
+**Objective:** Connect HANA to the organization's systems and configure clinical protocols.
+
+**Activities:**
+- EHR API connection: Establish secure data exchange between HANA and the organization's EHR
+- Data mapping: Map patient fields, appointment data, and clinical data between systems
+- Protocol configuration: Customize HANA's clinical protocols to match the organization's specific workflows, terminology, and requirements
+- Voice and language setup: Configure voice persona, language preferences, and communication style
+- Security verification: Validate encryption, access controls, and compliance requirements
+
+**Pre-Built Integrations:**
+
+| EHR System | Integration Type | Setup Time |
+|-----------|-----------------|------------|
+| Epic | FHIR R4 API | 3-5 days |
+| Cerner/Oracle Health | FHIR R4 API | 3-5 days |
+| Athenahealth | REST API | 2-4 days |
+| AllScripts | API + HL7 | 4-6 days |
+| eClinicalWorks | API | 3-5 days |
+| DrChrono | REST API | 2-3 days |
+| Custom/Other | HL7 FHIR or custom | 5-10 days |
+
+**Organization effort required:** 10-15 hours of IT and clinical team time
+
+### Phase 3: Testing & Validation (Days 16-25)
+
+**Objective:** Verify clinical accuracy, technical reliability, and workflow integration before go-live.
+
+**Testing Layers:**
+
+**Functional testing:**
+- End-to-end conversation flow for each configured protocol
+- EHR data retrieval and write-back accuracy
+- Branch logic validation for all protocol paths
+- Escalation trigger testing
+
+**Clinical validation:**
+- Clinical team reviews sample conversations for accuracy and appropriateness
+- Edge case testing with challenging patient scenarios
+- Medication and condition entity accuracy verification
+- Safety protocol testing (distress detection, escalation handling)
+
+**Integration testing:**
+- Data flow between HANA and EHR confirmed
+- Appointment scheduling integration verified
+- Notification and alert delivery tested
+- Reporting and analytics pipeline validated
+
+**User acceptance testing:**
+- Staff members interact with the system as simulated patients
+- Clinical leads review conversation transcripts
+- Operations team validates workflow integration
+- Patient experience team assesses communication quality
+
+**Organization effort required:** 15-20 hours across clinical, IT, and operations teams
+
+### Phase 4: Training & Deployment (Days 26-30)
+
+**Objective:** Train staff, deploy to production, and begin live patient conversations.
+
+**Staff training:**
+- Dashboard walkthrough: How to view conversation outcomes, patient responses, and quality metrics
+- Escalation handling: How to receive and manage AI-escalated patient interactions
+- Protocol management: How to request protocol changes or flag issues
+- Reporting: How to access and interpret engagement reports
+
+Training is minimal by design — HANA operates autonomously. Staff interact with dashboards and escalation queues, not with the AI system directly.
+
+| Role | Training Time | Focus |
+|------|-------------|-------|
+| Clinical lead | 60 minutes | Protocol review, quality oversight |
+| Care coordinators | 45 minutes | Escalation handling, dashboard |
+| Front desk staff | 30 minutes | Patient questions about AI calls |
+| IT administrator | 45 minutes | Integration monitoring, troubleshooting |
+| Executives | 20 minutes | ROI dashboard, summary metrics |
+
+**Go-live approach:**
+- Phased rollout: Start with 10-20% of eligible patients in the first week
+- Ramp to 50% in week two, 100% by week three
+- Dedicated HANA support team monitors every conversation during initial deployment
+- Daily check-in calls during the first week, weekly thereafter
+
+**Organization effort required:** 4-6 hours total across all staff
+
+### Phase 5: Optimization (Ongoing)
+
+**Objective:** Continuously improve performance, expand use cases, and maximize ROI.
+
+**Monthly activities:**
+- Performance review: Analysis of quality metrics, completion rates, and patient satisfaction
+- Protocol refinement: Update conversation flows based on production learnings
+- Use case expansion: Plan and deploy additional clinical protocols
+- Integration deepening: Add data sources, automate additional workflows
+
+**Quarterly activities:**
+- ROI assessment: Measure actual financial impact against projections
+- Strategic planning: Identify next-phase expansion opportunities
+- Benchmark comparison: Compare performance against industry standards
+- Clinical review: Medical advisory review of AI conversation quality
+
+## Implementation Success Metrics
+
+| Metric | Target | Typical Achievement |
+|--------|--------|-------------------|
+| Initial setup time | < 1 week | 3-5 business days |
+| Staff training required | < 2 hours per role | 30-60 minutes |
+| Time to first live conversation | < 30 days | 18-25 days |
+| Integration test coverage | 100% | 98%+ |
+| Data mapping accuracy | 99.9% | 99.95% |
+| Staff adoption rate | > 90% | 95% |
+| Patient opt-out rate | < 5% | 2-3% |
+
+## What We Handle vs. What You Handle
+
+| HANA Handles | Organization Handles |
+|-------------|---------------------|
+| All infrastructure setup and management | EHR API credentials and access |
+| Clinical protocol design and configuration | Clinical review and approval of protocols |
+| EHR integration development | IT point of contact for integration |
+| Voice and language configuration | Preferred voice and communication style |
+| Quality monitoring and improvement | Escalation queue management |
+| Compliance and security | BAA execution |
+| Ongoing model updates | Feedback on conversation quality |
+| 24/7 system monitoring | Staff training attendance |
+
+## Common Implementation Questions
+
+**Do we need to change our EHR configuration?**
+No. HANA connects to your existing EHR APIs. We read patient data and write back conversation outcomes using standard interfaces.
+
+**What if our EHR doesn't have a standard API?**
+HANA supports HL7 FHIR, REST APIs, and can work with HL7v2 interfaces. For non-standard systems, we build custom connectors during the integration phase.
+
+**How do patients know they're talking to AI?**
+HANA introduces itself transparently at the start of every conversation. Patients are informed they're speaking with an AI assistant and offered the option to speak with a human instead.
+
+**What happens when the AI can't handle a conversation?**
+HANA performs a warm handoff to your staff with full conversation context. The staff member sees what was discussed, what information was collected, and why the escalation occurred.
+
+**Can we customize the conversation scripts?**
+Yes. Protocols are fully configurable — questions, branching logic, language, escalation triggers, and data collection requirements are all tailored to your organization's needs.
+
+**What about patients who prefer not to interact with AI?**
+Patient preferences are respected. Patients who opt out are flagged and routed to human staff. Opt-out rates are typically 2-3%.

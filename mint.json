@@ -1,0 +1,182 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "HANA",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Contact",
+      "url": "mailto:matteo@hana.health"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Request a Pilot",
+    "url": "mailto:matteo@hana.health?subject=Pilot%20Request"
+  },
+  "tabs": [
+    {
+      "name": "Developers",
+      "url": "developers"
+    },
+    {
+      "name": "Infrastructure",
+      "url": "infrastructure"
+    },
+    {
+      "name": "Case Studies",
+      "url": "case-studies"
+    },
+    {
+      "name": "Research",
+      "url": "research"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Contact Us",
+      "icon": "envelope",
+      "url": "mailto:matteo@hana.health"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "url": "https://linkedin.com/company/hana-health"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "problem/engagement-gap"
+      ]
+    },
+    {
+      "group": "Platform",
+      "pages": [
+        "platform/overview",
+        "platform/architecture",
+        "platform/reasoning-engine",
+        "platform/features",
+        "platform/integrations",
+        "platform/safety-compliance"
+      ]
+    },
+    {
+      "group": "Solutions",
+      "pages": [
+        "solutions/intake-coordination",
+        "solutions/chronic-care-management",
+        "solutions/behavioral-health",
+        "solutions/pre-post-operative",
+        "solutions/medication-adherence",
+        "solutions/wearable-integration",
+        "solutions/platform-partnerships"
+      ]
+    },
+    {
+      "group": "Pilots & Pricing",
+      "pages": [
+        "pilots/30-day-pilot",
+        "pilots/pricing"
+      ]
+    },
+    {
+      "group": "Competitive Landscape",
+      "pages": [
+        "competitive/positioning",
+        "competitive/capital-efficiency"
+      ]
+    },
+    {
+      "group": "Company",
+      "pages": [
+        "company/team",
+        "company/metrics",
+        "company/faq"
+      ]
+    },
+    {
+      "group": "Developers",
+      "pages": [
+        "developers/quickstart",
+        "developers/authentication",
+        "developers/api-reference",
+        "developers/ehr-proxy-api",
+        "developers/sdk",
+        "developers/webhooks",
+        "developers/ehr-integration",
+        "developers/white-label"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "guides/integration-patterns",
+        "guides/implementation-onboarding",
+        "guides/personalization",
+        "guides/enterprise-guide"
+      ]
+    },
+    {
+      "group": "Security & Compliance",
+      "pages": [
+        "security/overview",
+        "security/data-residency"
+      ]
+    },
+    {
+      "group": "Infrastructure",
+      "pages": [
+        "infrastructure/overview",
+        "infrastructure/agent-design",
+        "infrastructure/focused-agents",
+        "infrastructure/reasoning-engine",
+        "infrastructure/consensus-reasoning",
+        "infrastructure/supersafe-intelligence",
+        "infrastructure/self-correcting-models",
+        "infrastructure/evaluation-framework",
+        "infrastructure/roi-cost-analysis",
+        "infrastructure/data-architecture",
+        "infrastructure/deployment",
+        "infrastructure/observability",
+        "infrastructure/system-card"
+      ]
+    },
+    {
+      "group": "Case Studies",
+      "pages": [
+        "case-studies/overview",
+        "case-studies/adhd-diagnostic",
+        "case-studies/surgical-readiness",
+        "case-studies/medication-adherence",
+        "case-studies/rural-psych-access",
+        "case-studies/bhi-program",
+        "case-studies/sdk-integration"
+      ]
+    },
+    {
+      "group": "Research",
+      "pages": [
+        "research/multi-agent-study",
+        "research/methodology",
+        "research/results"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://linkedin.com/company/hana-health"
+  }
+}
