@@ -53,6 +53,46 @@ HANA has been deployed and validated across diverse clinical settings:
 
 ### High-Level Architecture
 
+```mermaid
+graph TB
+    subgraph Shared["Shared Services"]
+        AUTH["Authentication (SAML/OIDC)"]
+        TEL["Telephony (SIP Trunking)"]
+        EHRG["EHR Gateway (FHIR R4)"]
+        QUEUE["Queue System"]
+        EVALPIPE["Evaluation Pipeline"]
+        OBSRV["Observability"]
+    end
+
+    subgraph Agent["Agent Package"]
+        PROTO["Protocol Configuration"]
+        RE["Reasoning Engine\n(GPU · Pre-Call Planning)"]
+        CE["Conversation Engine\n(CPU · Real-Time)"]
+        EHRC["EHR Connector"]
+        QE["Quality Evaluation"]
+    end
+
+    subgraph Safety["Safety Layer"]
+        OSA["Observational Safety Agents\n(Rule-Based · Deterministic)"]
+        VI["Vocal Intelligence\n(Prosodic Analysis)"]
+    end
+
+    PROTO --> RE
+    RE -->|Conversation Plan| CE
+    EHRC --> RE
+    EHRC --> CE
+    TEL <--> CE
+    EHRG <--> EHRC
+    EVALPIPE --> QE
+    AUTH --> CE
+    CE --> QE
+    OSA -->|Parallel Monitoring| CE
+    VI -->|Audio Features| OSA
+    VI -->|Engagement Signals| CE
+    QUEUE --> RE
+    QUEUE --> CE
+```
+
 #### System Architecture Characteristics
 
 1. **Dual-Model Design**: Each conversation is powered by two distinct AI systems — a pre-call Reasoning Engine for planning and a real-time Conversation Engine for execution

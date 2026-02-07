@@ -20,6 +20,30 @@ Features:
 
 ### Outbound Retention & Engagement
 
+```mermaid
+graph LR
+    subgraph Outreach["Outreach Flow"]
+        EHR["EHR Query\nCare gaps · Follow-ups"] --> ID["Identify\nPatients"]
+        ID --> SMS["SMS First\nContact"]
+        SMS --> SCHED["Patient\nSchedules Call"]
+        SCHED --> CALL["Voice\nConversation"]
+    end
+
+    subgraph Memory["Longitudinal Memory"]
+        CM["Clinical Context\n(from EHR)"]
+        IM["Interaction Context\n(built by HANA)"]
+        EI["Engagement Intelligence\n(learned over time)"]
+    end
+
+    CALL --> CM
+    CALL --> IM
+    CALL --> EI
+    CM --> NEXT["Next\nConversation"]
+    IM --> NEXT
+    EI --> NEXT
+    NEXT --> CALL
+```
+
 - **SMS-First Outreach**: Outbound engagement always begins with a text message — never an unsolicited cold call. The patient receives context about why HANA is reaching out and schedules a call at their preferred time. This approach consistently produces higher answer rates and patient satisfaction compared to cold outbound calls.
 - **Automated Detection**: Identifies patients requiring outreach by querying EHR data, waitlists, and scheduling systems
 - **Goal Persistence**: Remembers outreach objectives and brings them up dynamically regardless of when the conversation occurs
