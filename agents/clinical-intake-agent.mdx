@@ -1,0 +1,63 @@
+---
+title: "Clinical Intake Agent"
+description: "Structured clinical data collection for pre-visit intake, assessment administration, and CMS-billable documentation."
+---
+
+## Overview
+
+The Clinical Intake Agent handles structured clinical data collection — the forms, screenings, and assessments that traditionally require paper, portals, or staff phone calls. It converts unstructured patient dialogue into structured clinical data flowing directly into the EHR.
+
+## Use Cases
+
+### Pre-Visit Intake
+- Demographics and insurance verification
+- Chief complaint and symptom collection
+- Medical history update
+- Current medication list reconciliation
+- Allergy review
+- Social history (smoking, alcohol, exercise)
+- Family history updates
+
+### Clinical Screening
+- Validated assessment instruments (PHQ-9, GAD-7, AUDIT-C, CAGE-AID, ASQ-3, Edinburgh, KCCQ)
+- Natural conversation administration rather than robotic question-reading
+- Automatic clinical scoring with threshold-based alerts
+- Results written directly to EHR as structured observations
+
+### BHI/CCM Documentation
+- Structured interactions meeting CMS requirements for billing codes
+- Automated documentation for billing compliance
+- Time tracking for CMS time-based codes
+
+### Post-Procedure Follow-Up
+- Structured symptom collection after procedures
+- Pain assessment and medication effectiveness
+- Complication screening with escalation
+- Recovery milestone tracking
+
+## Structured Data Extraction
+
+The agent converts unstructured patient dialogue into structured clinical data with entity extraction, verification against EHR data, and automatic follow-up question generation for ambiguous or incomplete information.
+
+## Assessment Administration
+
+HANA administers validated clinical assessments through natural conversation, mapping patient responses to scoring categories, calculating total scores, triggering clinical alerts, and documenting structured scores in the EHR.
+
+## EHR Write-Back
+
+| Data Type | EHR Destination | Format |
+|-----------|----------------|--------|
+| Demographics | Patient record | FHIR Patient |
+| Medications | Medication list | FHIR MedicationStatement |
+| Conditions | Problem list | FHIR Condition (ICD-10) |
+| Screening scores | Clinical notes | FHIR Observation |
+| Allergies | Allergy list | FHIR AllergyIntolerance |
+| Appointments | Schedule | FHIR Appointment |
+| Clinical notes | Encounter notes | FHIR DocumentReference |
+
+## Note Generation
+
+- **Configurable Templates**: Note styles per organization, specialty, and provider
+- **Structured JSON**: All clinical data captured as structured JSON before note generation
+- **SOAP Support**: Subjective, Objective, Assessment, Plan sections from conversation content
+- **ICD-10/CPT Suggestions**: Relevant billing codes suggested based on conversation content

@@ -1,0 +1,58 @@
+---
+title: "User-level Personalization"
+description: "Extensive customization capabilities adapting to the specific needs of healthcare organizations, departments, and individual patients."
+---
+
+## Overview
+
+HANA's voice engagement framework provides extensive customization capabilities to adapt to the specific needs of healthcare organizations, clinical specialties, and individual patients.
+
+## Personalization Dimensions
+
+### Organization-level Settings
+
+- **Brand Alignment**: Customizable voice persona and greeting language to match healthcare organization's identity
+- **Terminology Adaptation**: Support for organization-specific medical terminology and abbreviations
+- **Workflow Integration**: Tailored insertion points within existing clinical processes (scheduling, intake, follow-up)
+- **Security Controls**: Granular access management aligned with organizational policies
+- **Operating Hours**: Configurable call scheduling, after-hours behavior, and retry policies
+
+### Specialty-specific Customization
+
+- **Specialty Protocols**: Pre-configured conversation templates for 20+ medical specialties
+- **Condition-specific Content**: Tailored conversation flows for common conditions within each specialty
+- **Assessment Instruments**: Specialty-appropriate screening tools (PHQ-9, GAD-7, AUDIT-C, CAGE-AID, etc.)
+- **Regulatory Compliance**: Specialty-specific documentation requirements built into protocols
+- **Billing Integration**: CPT/HCPCS code suggestions relevant to each specialty and conversation type
+
+### Individual Patient Preferences
+
+- **Language**: Primary language detection and preference storage with 30+ language support
+- **Communication Style**: Adjustable pacing, detail level, and formality based on patient profile
+- **Contact Preferences**: Best time to call, preferred channel (voice, SMS), callback scheduling
+- **Personal Templates**: Patient-specific conversation adjustments that persist across interactions
+- **Learning Adaptation**: System adapts to individual communication patterns over time
+
+## Personalization Infrastructure
+
+### Patient Profile Management
+
+- **Preference Persistence**: Secure storage of patient settings across conversations and channels
+- **Role-based Defaults**: Initial settings based on clinical protocol and patient demographics
+- **Preference Portability**: Settings follow patients across departments, locations, and provider changes
+- **Version Compatibility**: Patient preferences maintained through system updates
+
+### Personalization Workflow
+
+- **Guided Setup**: Interactive onboarding for initial organization and protocol personalization
+- **Continuous Refinement**: Ongoing opportunities to adjust preferences based on conversation outcomes
+- **Preference Analytics**: Insights into which personalization options improve engagement and completion rates
+- **Protocol Sharing**: Ability to share effective protocol configurations within organizations
+
+### Technical Implementation
+
+- **Efficient Caching**: Local caching of personalization settings for fast conversation initialization
+- **Synced Preferences**: Real-time synchronization across channels (voice, SMS) and sessions
+- **Fallback Handling**: Graceful defaults when personalization data is unavailable
+- **Performance Optimization**: Minimal impact on conversation response latency regardless of personalization level
+- **Privacy Compliance**: All preference data encrypted, auditable, and deletable per patient request

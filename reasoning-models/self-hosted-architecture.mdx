@@ -1,0 +1,150 @@
+---
+title: "Self-hosted Architecture"
+description: "Enterprise-grade infrastructure for HANA's voice AI platform: service architecture, tenant management, security, and observability."
+---
+
+## Overview
+
+HANA's architecture is designed to provide enterprise-grade security, scalability, and reliability for voice-based clinical AI agents. The architecture is built around a service-oriented model that supports multi-tenancy, cross-team collaboration, and comprehensive lifecycle management.
+
+## Architecture Components
+
+### 1. Cross-team Workflow
+
+Supports collaboration across engineering teams with clear coordination and structure:
+
+- **Standardized Interfaces**: Shared APIs and messaging protocols streamline communication between conversation engine, reasoning engine, EHR gateway, and telephony services
+- **Managed Dependencies**: Teams align on service contracts and reuse common infrastructure through defined collaboration patterns
+
+### 2. Tenant Management
+
+Maintains performance, security, and organizational clarity through isolation and governance:
+
+**Tenant Onboarding:**
+- Automated provisioning of isolated environments per healthcare organization
+- EHR credential management and connection validation
+- Protocol configuration and clinical workflow setup
+- Voice persona and language configuration
+
+**Tenant Boundaries:**
+- Data isolation: Patient data never crosses tenant boundaries
+- Configuration isolation: Independent protocols, escalation rules, and voice settings
+- Network isolation: Tenant-specific encryption keys and access controls
+- Audit isolation: Complete audit trail per tenant for compliance
+
+### 3. Engineering Lifecycle
+
+Covers the full pipeline from development to production monitoring:
+
+- **CI/CD Pipeline**: Automated build, test, and deployment for all services
+- **Staging Environments**: Full production replica for pre-deployment validation
+- **Blue-Green Deployments**: Zero-downtime deployments with instant rollback capability
+- **Canary Releases**: Gradual traffic shifting for new model versions
+
+### 4. Reliability
+
+Optimized for productivity, reliability, and resilience:
+
+- **Auto-scaling**: Horizontal scaling based on concurrent call volume
+- **Circuit Breakers**: Automatic failure detection and isolation
+- **Health Checks**: Continuous health monitoring with automatic remediation
+- **Multi-Zone Deployment**: Services deployed across multiple availability zones
+
+## Infrastructure Details
+
+### Cloud Infrastructure
+
+HANA runs on cloud infrastructure with healthcare-grade security and compliance:
+
+**Production Environment:**
+- Primary cloud: GCP/AWS with healthcare BAA
+- Kubernetes orchestration (GKE/EKS) for container management
+- GPU-accelerated inference nodes for reasoning engine
+- CPU-optimized nodes for real-time conversation engine (latency-critical)
+
+**Development:**
+- Isolated non-production environment for testing and staging
+- Synthetic patient data for development — no real PHI in non-prod
+
+**Service Routing:**
+Services are accessed through a standardized routing pattern:
+- API Gateway with rate limiting and authentication
+- Internal service mesh with mutual TLS
+- Load balancing across service replicas
+
+---
+
+## Service Fabric Architecture
+
+### Service Fabric Overview
+
+HANA's Service Fabric provides the foundational platform for all agent services and infrastructure components. It manages service discovery, communication, scaling, and health monitoring.
+
+**Core Components:**
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| Container Orchestration | Kubernetes | Service deployment, scaling, health management |
+| Service Mesh | Istio/Linkerd | Service-to-service communication, mTLS, observability |
+| API Gateway | Kong/Envoy | External traffic management, rate limiting, auth |
+| Message Queue | Redis/RabbitMQ | Async communication between services |
+| Database | PostgreSQL | Conversation state, patient context, configuration |
+| Cache | Redis | Session state, EHR data cache, conversation plans |
+| Object Storage | Cloud Storage | Conversation recordings, transcripts, model artifacts |
+
+**Service Communication:**
+- Synchronous: gRPC for latency-critical inter-service calls (conversation engine ↔ voice synthesis)
+- Asynchronous: Message queue for non-blocking operations (post-call analysis, EHR write-back)
+- Streaming: WebSocket for real-time voice data transport
+
+---
+
+## Security and Compliance
+
+### Network Security
+
+- **Zero Trust Architecture**: No implicit trust, continuous verification for every request
+- **Network Segmentation**: Micro-segmentation with software-defined perimeters
+- **Encryption in Transit**: TLS 1.3 for all communications
+- **Encryption at Rest**: AES-256 encryption for all stored data
+
+### Access Management
+
+- **Identity Provider Integration**: SAML/OIDC integration with enterprise IdP
+- **Multi-Factor Authentication**: Required for all administrative access
+- **Role-Based Access Control**: Granular permissions based on principle of least privilege
+- **Regular Access Reviews**: Automated access certification processes
+
+### Compliance
+
+- **SOC 2 Type II**: Annual compliance audits covering security, availability, and confidentiality
+- **HIPAA Compliance**: Full compliance with US healthcare data privacy regulations with executed BAA
+- **GDPR Compliance**: European data protection regulations support
+- **Audit Logging**: Comprehensive audit trails for all system activities
+
+---
+
+## Observability
+
+To ensure consistent and safe performance across our architecture we implement rigorous observability standards.
+
+### Metrics & Monitoring
+
+- **Infrastructure Metrics**: CPU, memory, disk, network utilization across all services
+- **Application Metrics**: Conversation completion rates, latency percentiles, error rates, quality scores
+- **Real-time Dashboards**: Grafana-based visualization for operations and clinical teams
+- **Alerting**: PagerDuty integration for critical alerts with defined escalation procedures
+
+### Logging
+
+- **Centralized Logging**: ELK stack (Elasticsearch, Logstash, Kibana) for log aggregation and analysis
+- **Structured Logging**: JSON-formatted logs with consistent schema across all services
+- **Log Retention**: Configurable retention policies per environment and data classification
+- **Search & Analytics**: Full-text search and log analytics for troubleshooting and compliance
+
+### Tracing
+
+- **Distributed Tracing**: End-to-end request tracking across services for every conversation
+- **Performance Analysis**: Latency analysis and bottleneck identification in the conversation pipeline
+- **Error Tracking**: Automatic error detection and alerting with full conversation context
+- **Service Dependency Mapping**: Visual service topology and dependency graphs

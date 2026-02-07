@@ -1,0 +1,48 @@
+---
+title: "Autonomous Trained Agents"
+description: "Agents designed to automate complex, multi-step healthcare workflows through role-based activation, contextual memory, and pattern-aware behavior."
+---
+
+## Overview
+
+HANA is actively developing autonomous trained agents designed to streamline healthcare workflows by automating complex, multi-step tasks traditionally handled by clinical staff. Our current architecture includes foundational components such as real-time patient conversation management, task triage, and clinical data extraction — each contributing to agent specialization over time. These agents are built to adapt to role-specific workflows (e.g., intake coordinator, care navigator, outreach specialist) and are architected to incorporate behavioral patterns and institutional routines into their task execution logic.
+
+## Importance
+
+Autonomous trained agents combine structured learning, contextual memory, and task-specific reasoning to simulate human decision-making in healthcare workflows. These agents ingest unstructured input — such as patient voice conversations or incoming EHR data — and convert it into structured actions by referencing known medical ontologies, prior patient interactions, and observed organizational preferences. Over time, agents refine their behavior by learning from task feedback, repeat interactions, and localized workflow patterns.
+
+## Current Capabilities
+
+### Real-time Patient Conversations
+- Conduct voice-based clinical conversations with > 95% information extraction accuracy
+- Extract structured clinical elements (medications, conditions, screenings) in real-time to support downstream task automation
+
+### AI Triage & Task Dispatch
+- Classifies incoming patient needs by intent and clinical urgency, routing conversations to appropriate protocols or staff
+- Supports modular agent chaining based on observed workflows and organizational preferences
+
+### Clinical Decision Support
+- Provides protocol-guided conversation branching based on patient responses and known clinical guidelines
+- Operates within scoped environments with configurable guardrails and auditing for transparency
+
+### Pattern-Aware Behavior Modeling
+- Agents continuously observe conversation patterns across patient populations and use structured feedback to adjust responses
+- Over time, agents apply known organizational routines (e.g., scheduling preferences, referral patterns, common protocols) to new patient contexts to reduce friction and increase relevance
+
+### Structured Output Generation
+- Agents produce standardized outputs such as clinical notes, appointment bookings, referral triggers, and care gap alerts
+- These outputs are tied to intent signals derived from conversation data and historical patterns
+
+## Implementation Workflow
+
+1. **Role-Based Activation**: Agents enabled based on clinical workflow role (intake, follow-up, care coordination, scheduling)
+2. **Context Setup**: Agents configured with access to patient EHR data, conversation history, and organizational preferences. Optional scheduling and referral system integrations enhance context
+3. **Task Detection & Triggering**: Agents monitor real-time conversation content and trigger actions based on clinical patterns, keywords, or protocol rules
+4. **Reasoning & Output**: Agents generate structured outputs — clinical notes, screening scores, appointment bookings — tailored to context and role
+5. **Feedback Integration**: Clinical team feedback logged and used to refine agent behavior over time
+6. **Memory & Personalization**: Agents adapt to individual patient communication patterns while maintaining strict data isolation between organizations
+7. **Audit & Oversight**: All agent actions logged and reviewable for transparency and compliance
+
+## Future Integration
+
+Autonomous trained agents are a natural evolution of HANA's current infrastructure. With role-based orchestration, protocol-driven conversation management, and secure patient memory, we are positioned to support agents that learn from organizational behavior while remaining compliant and auditable. These agents will unlock scalable, safe task delegation across the care journey — beginning with high-trust domains and extending into more dynamic, multi-agent collaborations.

@@ -1,0 +1,47 @@
+---
+title: "Handling PHI"
+description: "Framework for secure handling of Protected Health Information across its entire lifecycle: collection, access, storage, monitoring, and disposal."
+---
+
+## Overview
+
+This framework covers five key areas: obtaining explicit consent and collecting only minimum necessary data, implementing role-based access controls with multi-factor authentication, securely storing and segregating PHI in cloud environments, monitoring for anomalies with incident response procedures, and establishing clear retention and disposal policies. These measures work together to ensure PHI is handled securely throughout its entire lifecycle while maintaining regulatory compliance.
+
+## Data Collection & Consent
+
+- Explicit consent mechanisms integrated into patient conversation workflows — patients are informed they are speaking with an AI and given the option to opt out
+- Transparent privacy policies clearly communicating data use and conversation recording
+- Only minimum necessary PHI collected per HIPAA regulations — conversations follow protocol-defined data collection scope
+- Conversation recording consent obtained at the start of each interaction per applicable state regulations
+
+## Data Access Management
+
+- **Role-based access control (RBAC)** limiting PHI access strictly to necessary personnel — clinical teams see conversation outcomes, engineering teams see anonymized metrics
+- **Mandatory Multi-Factor Authentication (MFA)** for all accounts with PHI access
+- **Regular audits** of access logs and reviews of privileges, ensuring minimum necessary access
+- **Time-limited access**: Temporary access grants for troubleshooting expire automatically
+- **Break-glass procedures**: Emergency access with mandatory post-access review
+
+## PHI Storage & Segregation
+
+- **Logical separation** of PHI in cloud storage environments to isolate sensitive data from general workloads
+- **Robust tagging and classification** of PHI for easy auditing, retrieval, and management
+- **Tenant isolation**: Patient data from different healthcare organizations stored in separate encrypted partitions
+- **Conversation recordings** stored with AES-256 encryption in healthcare-grade cloud storage with access logging
+- **Structured clinical data** (extracted entities, screening scores) stored in encrypted databases with row-level access controls
+
+## Monitoring & Incident Response
+
+- **Real-time monitoring** with automated alerts specific to PHI handling anomalies
+- **Defined and documented** PHI-specific incident response plan compliant with HIPAA breach notification rule
+- **Regular vulnerability scanning** and penetration tests specifically targeting PHI repositories
+- **Conversation pipeline monitoring**: Automated detection of unexpected PHI exposure in logs or system outputs
+- **Anomaly detection**: Unusual access patterns (volume, timing, geography) trigger immediate investigation
+
+## PHI Disposal & Retention Policies
+
+- **Clearly defined PHI retention policies** in compliance with HIPAA requirements and state-specific regulations
+- **Secure and documented procedures** for PHI disposal including permanent deletion and secure destruction
+- **Conversation recording retention**: Configurable per healthcare organization with automated expiration
+- **De-identification pipeline**: PHI can be de-identified for analytics and quality improvement while original records are disposed
+- **Disposal audit trail**: Every deletion operation logged with timestamp, authorization, and verification

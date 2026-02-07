@@ -1,0 +1,88 @@
+---
+title: "HANA Overview"
+description: "A concise overview of HANA's agentic system design and infrastructure, providing a high-level understanding of the system architecture and technology underlying HANA's healthcare voice agents."
+---
+
+## Welcome
+
+HANA is a platform that empowers healthcare organizations to deploy voice-based patient engagement agents in minutes. These agents automate outbound and inbound patient conversations, streamline clinical data collection, and improve care coordination — all while maintaining the highest standards of clinical safety, security, and reliability.
+
+### ROI-First Approach
+
+1. Provide an alternative to manual patient outreach at a fraction of the staff cost per engagement
+2. Success metrics include: patient completion rates, recovered appointments, accurate clinical data extraction, and CMS-billable conversation capture
+3. Ensure high ROI; organizations typically see full return within the first 90 days of deployment
+
+### Safe, Reliable, and Certain
+
+1. Our team includes experienced healthcare operators who have managed clinical workflows across behavioral health, primary care, and multi-specialty organizations
+2. Our technology provides seamless integration with existing EHR systems, enabling smooth adaptation to clinical workflows
+3. Unlike text-based engagement tools, HANA offers voice-first patient interaction with high completion rates and minimal staff burden
+
+### Highly Modular & Customizable
+
+1. Tailor solutions to fit the unique needs of your organization with our highly modular agent system
+2. Customize protocols, voice personas, and clinical workflows to match existing processes
+3. Easily scale and modify agents to adapt to changing requirements and growth
+
+---
+
+## System Card
+
+**Scalable Architecture for Voice-Based Healthcare Agents**
+
+### Design Principles
+
+- **Isolated**: Each agent operates independently with its own protocol configuration and data context
+- **Self-contained**: Agents include all necessary components for end-to-end conversation execution
+- **Composable**: Agents can be combined for complex workflows (e.g., intake → screening → scheduling)
+- **Customizable**: Every aspect of agent behavior is configurable per organization, specialty, and patient
+
+### High-Level Architecture
+
+#### System Architecture Characteristics
+
+1. **Dual-Model Design**: Each conversation is powered by two distinct AI systems — a pre-call Reasoning Engine for planning and a real-time Conversation Engine for execution
+2. **Consistent Stack**: Standard technology stack across all agents: Python/Node.js services, PostgreSQL, Redis, cloud object storage, and FHIR-based EHR integration
+3. **Multi-Modal Support**: System supports voice (outbound/inbound calls), SMS, and messaging channels
+4. **Headless Agents**: Some agents operate without a patient-facing interface — processing EHR data, generating care gap lists, or coordinating between other agents via APIs
+
+### Horizontal Components/Services
+
+1. **Authentication**: Unified authentication mechanism across all agent services using SAML/OIDC with enterprise IdP integration
+2. **Telephony**: Centralized SIP trunking and voice synthesis infrastructure shared across all voice agents
+3. **EHR Gateway**: Standardized FHIR R4 interface providing consistent EHR read/write across Epic, Cerner, Athena, and other systems
+4. **Queue System**: Enables agents to send and receive messages, trigger actions, and share results across the conversation pipeline
+5. **Evaluation Pipeline**: Shared quality assessment infrastructure using LLM-as-judge and rule-based validation
+6. **Observability**: Centralized logging, metrics, and tracing across all agent services
+
+### Agent Package Components
+
+Each agent package includes:
+
+1. **Protocol Configuration**: Clinical workflow definition including questions, branching logic, escalation triggers, and data extraction rules
+2. **Reasoning Engine Integration**: Pre-call planning that generates conversation plans from patient EHR data and protocol rules
+3. **Conversation Engine**: Real-time dialogue management with constrained response generation
+4. **EHR Connector**: Bi-directional data exchange with the patient's health record
+5. **Quality Evaluation**: Automated post-conversation quality scoring and error detection
+6. **Analytics**: Conversation outcome tracking, completion metrics, and clinical data extraction reporting
+
+### Sample Agent Design
+
+**Design Exercise — Voice Engagement Agent**
+
+**Agent Package Components:**
+- Authentication: Enabled by default for secure EHR access
+- Telephony: SIP integration for outbound/inbound voice
+- Protocol Engine: Configurable clinical conversation workflows
+
+**Infrastructure:**
+- Database: Patient context cache, conversation state, and extracted data
+- REST APIs: Conversation initiation, status, outcomes, and transcript retrieval
+- WebSocket: Real-time streaming for voice synthesis and recognition
+
+**Implementation:**
+1. API Endpoints: Conversation CRUD, protocol management, EHR sync
+2. Reasoning Service: Pre-call planning using patient data and protocol rules
+3. Conversation Service: Real-time dialogue with constrained generation
+4. Containerization: Kubernetes deployment with auto-scaling based on concurrent call volume

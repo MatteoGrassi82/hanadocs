@@ -27,20 +27,8 @@
   },
   "tabs": [
     {
-      "name": "Developers",
+      "name": "Developer Guide",
       "url": "developers"
-    },
-    {
-      "name": "Infrastructure",
-      "url": "infrastructure"
-    },
-    {
-      "name": "Case Studies",
-      "url": "case-studies"
-    },
-    {
-      "name": "Research",
-      "url": "research"
     }
   ],
   "anchors": [
@@ -48,131 +36,79 @@
       "name": "Contact Us",
       "icon": "envelope",
       "url": "mailto:matteo@hana.health"
-    },
-    {
-      "name": "LinkedIn",
-      "icon": "linkedin",
-      "url": "https://linkedin.com/company/hana-health"
     }
   ],
   "navigation": [
     {
       "group": "Getting Started",
       "pages": [
-        "introduction",
-        "problem/engagement-gap"
+        "getting-started/overview",
+        "getting-started/supersafe-intelligence"
       ]
     },
     {
-      "group": "Platform",
+      "group": "Reasoning Models",
       "pages": [
-        "platform/overview",
-        "platform/architecture",
-        "platform/reasoning-engine",
-        "platform/features",
-        "platform/integrations",
-        "platform/safety-compliance"
+        "reasoning-models/self-hosted-architecture",
+        "reasoning-models/eval-based-system",
+        "reasoning-models/self-correcting-models",
+        "reasoning-models/lrms-as-judge",
+        "reasoning-models/towards-roi"
       ]
     },
     {
-      "group": "Solutions",
+      "group": "Safe Intelligence [Security]",
       "pages": [
-        "solutions/intake-coordination",
-        "solutions/chronic-care-management",
-        "solutions/behavioral-health",
-        "solutions/pre-post-operative",
-        "solutions/medication-adherence",
-        "solutions/wearable-integration",
-        "solutions/platform-partnerships"
+        "security/cyber-intelligence",
+        "security/handling-phi",
+        "security/encryption",
+        "security/incidents-policy",
+        "security/on-premises"
       ]
     },
     {
-      "group": "Pilots & Pricing",
+      "group": "Implementation & Onboarding",
       "pages": [
-        "pilots/30-day-pilot",
-        "pilots/pricing"
+        "implementation/fast-adoption",
+        "implementation/personalization"
       ]
     },
     {
-      "group": "Competitive Landscape",
+      "group": "Better Decision Making",
       "pages": [
-        "competitive/positioning",
-        "competitive/capital-efficiency"
+        "decision-making/consensus-framework",
+        "decision-making/autonomous-agents"
       ]
     },
     {
-      "group": "Company",
+      "group": "Focused Agentic Architecture",
       "pages": [
-        "company/team",
-        "company/metrics",
-        "company/faq"
-      ]
-    },
-    {
-      "group": "Developers",
-      "pages": [
-        "developers/quickstart",
-        "developers/authentication",
-        "developers/api-reference",
-        "developers/ehr-proxy-api",
-        "developers/sdk",
-        "developers/webhooks",
-        "developers/ehr-integration",
-        "developers/white-label"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "guides/integration-patterns",
-        "guides/implementation-onboarding",
-        "guides/personalization",
-        "guides/enterprise-guide"
-      ]
-    },
-    {
-      "group": "Security & Compliance",
-      "pages": [
-        "security/overview",
-        "security/data-residency"
-      ]
-    },
-    {
-      "group": "Infrastructure",
-      "pages": [
-        "infrastructure/overview",
-        "infrastructure/agent-design",
-        "infrastructure/focused-agents",
-        "infrastructure/reasoning-engine",
-        "infrastructure/consensus-reasoning",
-        "infrastructure/supersafe-intelligence",
-        "infrastructure/self-correcting-models",
-        "infrastructure/evaluation-framework",
-        "infrastructure/roi-cost-analysis",
-        "infrastructure/data-architecture",
-        "infrastructure/deployment",
-        "infrastructure/observability",
-        "infrastructure/system-card"
-      ]
-    },
-    {
-      "group": "Case Studies",
-      "pages": [
-        "case-studies/overview",
-        "case-studies/adhd-diagnostic",
-        "case-studies/surgical-readiness",
-        "case-studies/medication-adherence",
-        "case-studies/rural-psych-access",
-        "case-studies/bhi-program",
-        "case-studies/sdk-integration"
+        "agents/voice-engagement-agent",
+        "agents/clinical-intake-agent",
+        "agents/decision-support-agent"
       ]
     },
     {
       "group": "Research",
       "pages": [
-        "research/multi-agent-study",
-        "research/methodology",
-        "research/results"
+        "research/active-research"
+      ]
+    },
+    {
+      "group": "Enterprise",
+      "pages": [
+        "enterprise/enterprise-guide"
+      ]
+    },
+    {
+      "group": "Developer Guide",
+      "pages": [
+        "developers/authentication",
+        "developers/api-reference",
+        "developers/ehr-proxy-api",
+        "developers/ehr-integration",
+        "developers/sdk",
+        "developers/webhooks"
       ]
     }
   ],

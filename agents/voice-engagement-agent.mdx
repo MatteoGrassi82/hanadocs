@@ -1,0 +1,65 @@
+---
+title: "Voice Engagement Agent"
+description: "Multi-channel patient communication agent for inbound and outbound voice interactions."
+---
+
+## Overview
+
+The Voice Engagement Agent provides multi-channel communication, fostering an agentic relationship between patients and healthcare organizations. It facilitates efficient, personalized interactions via voice calls and SMS, ensuring a seamless patient experience.
+
+## Top-Level Use Cases
+
+### Inbound Call Handling
+
+Healthcare organizations can handle greater call volume with better outcomes and reduced operational costs.
+
+Features:
+- **Low Latency NLP-based Skill Activation**: Loads contextually-specific protocols such as scheduling, insurance, triage, registration, medications, labs, forms, records, and billing. Includes warm transfers to appropriate staff when necessary.
+- **Low Latency Responses**: Simultaneous response planning using partial transcripts within speech loops. Sub-second response times from optimized conversation engine.
+- **Per-Patient Memory**: Tracks care goals, language preferences, identity verification, preferred contact methods, and self-scheduled callbacks across all channels.
+
+### Outbound Retention & Engagement
+
+- **Automated Detection**: Identifies patients requiring outreach by querying EHR data, waitlists, and scheduling systems
+- **Goal Persistence**: Remembers outreach objectives and brings them up dynamically regardless of when the conversation occurs
+- **Multi-channel Coordination**: Outreach spans voice and SMS with consistent context across channels
+
+## Capabilities
+
+### Appointment Management
+- Schedule, reschedule, and confirm appointments
+- Waitlist management and backfill
+- No-show follow-up and rebooking
+- Pre-visit preparation reminders
+
+### Care Gap Closure
+- Preventive screening outreach (mammography, colonoscopy, annual wellness)
+- Vaccination follow-up and scheduling
+- Lab work reminders
+- Referral completion tracking
+
+### Chronic Care Management
+- Monthly CCM check-in calls (CMS billable)
+- Medication adherence monitoring
+- Symptom tracking and trend detection
+- Care plan review and updates
+
+### Behavioral Health Integration
+- BHI qualifying conversations (CMS billable)
+- PHQ-9, GAD-7 administration through natural conversation
+- Crisis screening with appropriate escalation
+- Treatment adherence follow-up
+
+## Technical Specifications
+
+### Voice Quality
+- Natural conversational speech synthesis with dynamic prosody
+- Multiple voice personas configurable per organization
+- 30+ language support with clinical-grade accuracy
+- Automatic language detection and switching
+
+### Latency
+- Target response time: < 800ms p95
+- Parallel response planning during patient speech
+- Pre-computed segments for standard protocol language
+- Streaming synthesis begins before full response is composed

@@ -1,0 +1,46 @@
+---
+title: "Incidents / Policy Handling"
+description: "Disaster recovery, business continuity, incident response procedures, and operational monitoring for HANA's clinical AI platform."
+---
+
+## Disaster Recovery & Business Continuity
+
+### Backup Strategy
+
+- **Automated Backups**: Daily automated backups with point-in-time recovery for all critical data
+- **Cross-Region Replication**: Geographic distribution for disaster recovery — conversation data replicated across availability zones
+- **Backup Testing**: Regular restore testing and validation on quarterly schedule
+- **Retention Policies**: Configurable retention based on compliance requirements and healthcare organization policies
+
+### High Availability
+
+- **Multi-Zone Deployment**: Services deployed across multiple availability zones for fault tolerance
+- **Auto-Scaling**: Horizontal and vertical scaling based on concurrent call volume and time-of-day patterns
+- **Circuit Breakers**: Automatic failure detection and isolation — degraded service doesn't cascade to other components
+- **Health Checks**: Continuous health monitoring with automatic remediation and service restart
+
+### Incident Response
+
+- **Runbooks**: Documented procedures for common incidents (EHR connectivity loss, voice service degradation, model performance issues)
+- **On-Call Rotation**: 24/7 coverage with defined escalation procedures
+- **Post-Incident Reviews**: Blameless postmortems with documented action items and follow-through tracking
+- **Mean Time to Recovery**: Target MTTR of less than 30 minutes for critical issues affecting live patient conversations
+
+### Risk & Incident Management
+
+- **Incident response procedures**: Severity classification, communication templates, and resolution workflows
+- **Risk assessment frameworks**: Regular risk assessments covering infrastructure, data, and AI-specific risks
+- **Vendor risk management**: Third-party vendor security assessments and ongoing monitoring
+
+### Operational Monitoring
+
+- **Status**: Live monitoring with 24/7 coverage
+- **Coverage**: Infrastructure, application, and conversation quality monitoring
+- **Response**: Automated remediation systems for known failure patterns
+- **Escalation**: Defined incident response procedures with clear ownership
+
+## Security Team Contact
+
+- Email: security@hana.health
+- Purpose: Security inquiries, compliance requests, and incident reporting
+- Response Time: Standard business hours; critical security incidents receive immediate response
