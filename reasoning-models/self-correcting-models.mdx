@@ -1,0 +1,246 @@
+---
+title: "Self-correcting Models"
+description: "Advanced framework for autonomous error detection, correction, and continuous improvement in HANA's voice-based clinical conversations."
+---
+
+## Overview
+
+HANA's Self-correcting Models represent an advanced framework for autonomous error detection, correction, and continuous improvement in clinical voice AI. Built on our service architecture, these models employ multi-layered validation, real-time feedback loops, and adaptive learning mechanisms to achieve high reliability and accuracy in production environments.
+
+The system combines constrained generation, reference-free evaluation, and continuous optimization to create conversations that not only detect errors but actively improve performance over time.
+
+## Core Self-Correction Architecture
+
+### Multi-Layered Validation System
+
+**Immediate Validation (per-utterance):**
+- Template compliance checking for response format and content
+- Entity grounding verification against patient EHR data
+- Confidence scoring based on model internal states
+- Real-time safety filtering for clinically inappropriate content
+
+**Turn-Level Validation (between turns):**
+- Semantic consistency analysis across conversation turns
+- Cross-reference validation against known patient data and protocol constraints
+- Context coherence checking for multi-turn clinical dialogues
+- Domain-specific rule validation (e.g., medication names, ICD codes, assessment scoring)
+
+**Post-Call Validation (async):**
+- Comprehensive clinical accuracy verification using LLM-as-judge evaluation
+- Full transcript analysis for protocol compliance
+- Long-term context validation across patient's conversation history
+- Quality assurance against evaluation datasets and clinical standards
+
+### Speculative Correction Framework
+
+**Generation and Verification Pipeline:**
+- Conversation engine generates candidate responses for each turn
+- Reasoning engine evaluates and selects optimal response against protocol constraints
+- Custom optimization for the verification process to minimize latency impact
+- Self-calibration adjusts correction thresholds in real-time based on conversation context
+
+**Correction Strategies:**
+- Immediate corrections for detected errors during response generation (block and regenerate)
+- Mid-conversation corrections through clarification and re-asking (soft redirect)
+- Post-conversation corrections flagged for clinical team review
+- Predictive corrections based on known error patterns in similar conversations
+
+### Continuous Learning Mechanisms
+
+**Feedback Loop Architecture:**
+- Real-time correction logging for pattern identification across production conversations
+- Error taxonomy classification for systematic improvement
+- Performance regression detection and automatic rollback for model updates
+- A/B testing framework for correction strategy optimization
+
+**Data-Driven Optimization:**
+- Error pattern mining from production conversations
+- Correction effectiveness analysis across different clinical protocols
+- Model weight adjustments based on correction success rates
+- Dynamic threshold tuning for optimal precision-recall balance
+
+---
+
+## Self-Correction Implementation
+
+### Implementation Architecture
+
+**Real-Time Correction Pipeline:**
+
+Stream Processing:
+- Immediate error detection during response generation
+- Context-aware correction maintaining natural conversation flow
+- Memory-efficient correction processing per active session
+- Concurrent correction across all active conversation sessions
+
+Correction Decision Engine:
+- Multi-factor scoring combining confidence, context, and historical data
+- Threshold-based correction triggering with adaptive boundaries
+- Cost-benefit analysis for correction implementation (is re-asking worth the disruption?)
+- Patient experience optimization minimizing correction-related conversation friction
+
+### Batch Correction Framework
+
+**Historical Data Processing:**
+- Retroactive quality analysis for completed conversations
+- Large-scale pattern identification across conversation corpus
+- Data migration support during model updates
+- Quality metric recalculation after protocol changes
+
+**Performance Optimization:**
+- Parallel analysis processing across multiple compute nodes
+- Checkpoint-based recovery for long-running analysis jobs
+- Resource scheduling to minimize impact on live conversation services
+- Progress tracking and reporting for operational visibility
+
+### Error Detection Mechanisms
+
+**Statistical Anomaly Detection:**
+
+Confidence Score Analysis:
+- Low confidence detection using model uncertainty quantification
+- Confidence calibration ensuring scores reflect actual accuracy
+- Ensemble disagreement as indicator of potential errors
+- Temporal consistency checking across related outputs
+
+Pattern Recognition:
+- Known error pattern matching using curated clinical error databases
+- Linguistic anomaly detection for unnatural conversation patterns
+- Factual inconsistency detection using patient data validation
+- Reasoning chain verification for multi-step clinical logic
+
+**Domain-Specific Validation:**
+
+Clinical Domain:
+- Medication name validation against pharmaceutical databases
+- Drug interaction checking when multiple medications discussed
+- Medical terminology verification against authoritative sources (SNOMED CT, RxNorm)
+- Clinical guideline compliance checking for protocol-defined recommendations
+
+Assessment Instruments:
+- PHQ-9, GAD-7, AUDIT-C scoring validation against administration rules
+- Threshold-based alert verification for screening instrument results
+- Response mapping validation (patient language → assessment score category)
+
+### Correction Strategies
+
+**Immediate Correction Approaches:**
+
+Response-Level Correction:
+- Real-time response replacement during generation when safety or grounding check fails
+- Alternative phrasing generation for unclear or ambiguous utterances
+- Template fallback for responses that fail multiple validation checks
+- Graceful acknowledgment when system cannot generate a valid response
+
+Conversation-Level Correction:
+- Soft redirect: naturally steer conversation back on track without calling attention to the correction
+- Explicit clarification: directly address ambiguity or inconsistency with the patient
+- Graceful deferral: hand off to human staff when system cannot resolve the issue
+
+**Retrospective Correction Methods:**
+
+Post-Call Analysis:
+- Targeted error identification for specific clinical data extraction issues
+- Comprehensive quality assessment for entire conversation transcripts
+- Pattern identification across conversations for systematic protocol improvements
+- Clinical team notification for conversations requiring human review
+
+Learning Integration:
+- Protocol updates based on recurring error patterns
+- Template expansion incorporating correction insights
+- Training data augmentation with corrected conversation examples
+- Evaluation metric refinement based on correction effectiveness
+
+---
+
+## Performance Monitoring
+
+### Quality Metrics
+
+**Correction Effectiveness:**
+- Error detection rate (sensitivity) across different error types
+- False positive rate (specificity) for correction triggers
+- Correction accuracy measuring improvement quality
+- Patient experience impact of corrections vs. uncorrected conversations
+
+**System Performance:**
+- Correction latency impact on conversation response time
+- Throughput impact of correction processing on overall system
+- Resource utilization for correction infrastructure
+- Cost per correction for operational efficiency analysis
+
+### Operational Dashboards
+
+**Real-Time Monitoring:**
+- Live error detection rates across all active conversation sessions
+- Correction queue status and processing latency
+- Quality score distributions for current conversations
+- System health indicators for correction services
+
+**Historical Analysis:**
+- Error trend analysis over time and across different clinical protocols
+- Correction success patterns for strategy optimization
+- Model performance evolution showing improvement trajectory
+- Cost-benefit analysis of correction infrastructure investment
+
+### Quality Assurance Framework
+
+**Validation Protocols:**
+
+Multi-Stage Verification:
+- Automated validation using evaluation models
+- Human clinical review for flagged conversations
+- Peer review processes for edge cases and complex corrections
+- Patient feedback integration for real-world quality assessment
+
+Quality Gates:
+- Pre-deployment validation for model and protocol updates
+- A/B testing protocols for new correction strategies
+- Rollback procedures for correction strategy failures
+- Performance regression testing ensuring corrections don't degrade quality
+
+**Compliance and Auditing:**
+
+Audit Trail Management:
+- Complete correction history with timestamps and rationale
+- Decision audit logs for correction trigger events
+- Performance audit reports for regulatory compliance
+- Patient consent tracking for conversation recording and analysis
+
+Regulatory Compliance:
+- Healthcare compliance (HIPAA) for all correction operations involving PHI
+- Privacy compliance (GDPR) for personal information handling
+- AI safety compliance ensuring fair and unbiased corrections
+- SOC 2 Type II audit coverage for correction infrastructure
+
+---
+
+## Integration Guidelines
+
+### For Application Teams
+
+**Implementation Steps:**
+1. Enable correction APIs in agent configuration
+2. Set quality thresholds appropriate for clinical protocol requirements
+3. Implement feedback collection for clinician-reported issues
+4. Monitor correction impact on patient experience metrics
+
+**Best Practices:**
+- Graceful correction handling maintaining natural conversation flow
+- Patient transparency about AI nature without over-explaining corrections
+- Performance monitoring for correction-related latency
+- Fallback strategies for correction system unavailability
+
+### For Platform Teams
+
+**Infrastructure Management:**
+1. Deploy correction services across all environments (staging, production)
+2. Configure monitoring for correction system health
+3. Establish SLAs for correction response times
+4. Implement scaling policies for correction infrastructure
+
+**Operational Considerations:**
+- Resource allocation for correction processing workloads
+- Data pipeline management for correction training and evaluation
+- Security protocols for correction system access (PHI handling)
+- Disaster recovery for correction service failures

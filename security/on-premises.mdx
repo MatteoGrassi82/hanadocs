@@ -1,0 +1,48 @@
+---
+title: "On Premises"
+description: "On-premises deployment options for healthcare organizations requiring data residency, isolated model hosting, and full operational control."
+---
+
+## Overview
+
+On-premises infrastructure plays a critical role in enhancing safety for healthcare applications by ensuring that sensitive patient data remains within the provider's secure environment. By reducing reliance on external cloud services, on-premises deployments minimize potential exposure to third-party breaches and enable tighter access control. This localized, encrypted setup supports compliance with healthcare regulations and gives organizations full authority over data handling, retention, and auditability.
+
+### Data Residency & Compliance
+
+- On-premises deployments ensure PHI and sensitive health data never leave the provider's infrastructure, supporting strict compliance with HIPAA and region-specific regulations
+- Conversation recordings, transcripts, and extracted clinical data stored entirely within the organization's data center
+- Supports healthcare organizations with strict data sovereignty requirements that prohibit cloud-based PHI processing
+
+### Isolated Model Hosting
+
+- Self-hosted AI models and inference systems run within provider-controlled environments, eliminating third-party cloud exposure and reducing attack surfaces
+- Conversation engine and reasoning engine deployed on organization-managed hardware
+- Voice processing (speech recognition and synthesis) can run locally for complete data isolation
+- Supports encrypted inference for secure data processing during model execution
+
+### Operational Control & Auditability
+
+- Providers retain full control over data access, retention, and key management, with the ability to define deletion schedules or revoke access instantly
+- All infrastructure is auditable and designed to meet healthcare-grade standards for system integrity, access logging, and redundancy
+- Organization's IT team manages updates, patches, and security configurations on their own schedule
+- Complete visibility into all data flows and processing operations
+
+## On-Premises Architecture
+
+**Deployment Components:**
+- Container orchestration (Kubernetes) running on organization-managed servers
+- GPU nodes for reasoning engine inference (can use organization's existing GPU infrastructure)
+- CPU nodes for real-time conversation engine
+- Local telephony integration with organization's existing phone system (SIP trunking)
+- Local database and storage for all conversation data
+
+**Network Configuration:**
+- No outbound data transmission of PHI — all processing happens locally
+- Optional secure tunnel for model updates and system patches (no patient data transmitted)
+- Integration with organization's existing network security infrastructure
+- Compatible with organization's VPN and firewall configurations
+
+**Hybrid Options:**
+- On-premises data processing with cloud-based model updates (no PHI leaves premises)
+- Conversation execution on-premises with anonymized analytics sent to cloud for quality monitoring
+- Full air-gapped deployment for maximum isolation

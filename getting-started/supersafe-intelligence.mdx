@@ -1,0 +1,108 @@
+---
+title: "SuperSafe Intelligence"
+description: "Ensuring patient safety through calibrated confidence, hallucination reduction, and rigorous training data controls in voice-based clinical AI."
+---
+
+## Ensuring Safety
+
+Ensuring patient safety is paramount in deploying voice-based clinical AI. Unlike text tools where clinicians review outputs before they reach patients, HANA speaks directly to patients in real-time. To uphold rigorous safety standards, we incorporate advanced methods that reduce errors, mitigate risks, and enhance reliability. Our dual-model architecture and constrained generation collectively improve accuracy, reduce hallucinations, and ensure well-calibrated, trustworthy outputs.
+
+## Improved Calibration
+
+Calibrated confidence refers to the alignment between the system's predicted confidence scores and its actual observed accuracy. A well-calibrated system provides confidence levels that clinicians can reliably interpret as true indicators of prediction correctness. Unlike models prone to overconfidence, especially at higher confidence intervals, a calibrated model avoids falsely reassuring clinical teams with unjustifiably high certainty.
+
+Improved calibration directly supports safer and more informed clinical decisions, crucial in high-stakes scenarios where accurate confidence assessment helps prevent potential patient harm due to over-reliance on flawed outputs.
+
+### How HANA Achieves Calibration
+
+**Pre-Call Reasoning Engine:**
+- Generates clinical question sets with associated confidence weights per question
+- Each question tagged with expected information yield score
+- Protocol branching decisions carry explicit confidence thresholds
+- If confidence falls below threshold, system escalates to human review rather than guessing
+
+**Real-Time Conversation Engine:**
+- Monitors response quality against pre-computed expectations
+- Tracks semantic alignment between patient responses and expected clinical patterns
+- Flags unexpected responses for post-call clinical review
+- Never improvises clinical guidance — falls back to approved protocol language
+
+### Confidence Scoring
+
+Scoring Dimensions:
+- **Semantic Match (0.0–1.0)**: Does the patient response match the expected clinical entity?
+- **Completeness (0.0–1.0)**: Did the patient provide all required information?
+- **Consistency (0.0–1.0)**: Does the response contradict prior answers?
+
+Composite Score = weighted_avg(semantic, completeness, consistency)
+
+- IF composite < 0.7 → Re-ask with clarification
+- IF composite < 0.4 → Flag for human follow-up
+- IF composite < 0.2 → Graceful handoff to staff
+
+### Calibration Validation
+
+HANA validates calibration through continuous production monitoring:
+
+- **Binned accuracy analysis**: Group predictions by confidence level and measure actual accuracy per bin
+- **Expected Calibration Error (ECE)**: Track weighted average gap between predicted confidence and observed accuracy
+- **Per-protocol calibration**: Each clinical protocol maintains its own calibration curve, updated with every completed conversation
+- **Drift detection**: Automated alerts when calibration degrades beyond acceptable thresholds
+
+## Reducing Hallucinations
+
+By constraining the conversation engine to pre-approved response templates and grounding all entity references in verified data sources, HANA minimizes individual model biases and substantially reduces hallucinations.
+
+### Anti-Hallucination Architecture
+
+**Layer 1: Protocol Constraints**
+- Only approved questions can be asked
+- Only protocol-defined branches can be taken
+- No freeform clinical advice generation
+
+**Layer 2: Entity Grounding**
+- All patient references grounded in EHR data
+- Medication names validated against drug database
+- Clinical terms mapped to SNOMED CT / ICD-10 ontologies
+
+**Layer 3: Output Validation**
+- Real-time semantic check against protocol
+- Post-utterance verification before voice delivery
+- Automated flagging of ungrounded statements
+
+**Layer 4: Human Oversight**
+- All conversations logged and auditable
+- Flagged conversations reviewed within 24 hours
+- Protocol updates triggered by error patterns
+
+### Hallucination Monitoring
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Ungrounded clinical entity rate | < 0.1% | 0.03% |
+| Protocol deviation rate | < 0.5% | 0.2% |
+| Patient-reported misinformation | 0 | 0 |
+| Automated safety flag rate | < 2% | 1.1% |
+
+## Training Data Safety
+
+To further ensure the safety and compliance of our clinical AI systems, we apply rigorous controls to the data used in training and evaluation.
+
+### Data De-identification
+
+- All real-world clinical data undergoes thorough de-identification, removing or obfuscating PII and PHI in accordance with HIPAA Safe Harbor and Expert Determination standards
+- Re-identification risk assessment performed on each de-identified dataset
+- Every de-identification operation logged with timestamp, method, and verification status
+
+### Synthetic Data Generation
+
+- Expert-designed clinical conversation templates covering common and edge-case scenarios
+- Demographic diversity across age, gender, language, and cultural backgrounds to reduce model bias
+- Complexity gradients from simple appointment confirmations to complex multi-condition medication reviews
+- Adversarial examples with deliberately ambiguous patient responses for robust edge-case handling
+
+### Scenario Coverage Without Risk
+
+- By blending de-identified data with synthetic examples, we ensure high scenario diversity while eliminating risks of privacy breaches or data leakage
+- Training data distributions monitored for demographic, geographic, and clinical condition balance
+- All training data practices audited against HIPAA, GDPR, and SOC 2 Type II requirements

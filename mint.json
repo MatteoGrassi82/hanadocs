@@ -1,0 +1,118 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "HANA",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Contact",
+      "url": "mailto:matteo@hana.health"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Request a Pilot",
+    "url": "mailto:matteo@hana.health?subject=Pilot%20Request"
+  },
+  "tabs": [
+    {
+      "name": "Developer Guide",
+      "url": "developers"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Contact Us",
+      "icon": "envelope",
+      "url": "mailto:matteo@hana.health"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "getting-started/overview",
+        "getting-started/supersafe-intelligence"
+      ]
+    },
+    {
+      "group": "Reasoning Models",
+      "pages": [
+        "reasoning-models/self-hosted-architecture",
+        "reasoning-models/eval-based-system",
+        "reasoning-models/self-correcting-models",
+        "reasoning-models/lrms-as-judge",
+        "reasoning-models/towards-roi"
+      ]
+    },
+    {
+      "group": "Safe Intelligence [Security]",
+      "pages": [
+        "security/cyber-intelligence",
+        "security/handling-phi",
+        "security/encryption",
+        "security/incidents-policy",
+        "security/on-premises"
+      ]
+    },
+    {
+      "group": "Implementation & Onboarding",
+      "pages": [
+        "implementation/fast-adoption",
+        "implementation/personalization"
+      ]
+    },
+    {
+      "group": "Better Decision Making",
+      "pages": [
+        "decision-making/consensus-framework",
+        "decision-making/autonomous-agents"
+      ]
+    },
+    {
+      "group": "Focused Agentic Architecture",
+      "pages": [
+        "agents/voice-engagement-agent",
+        "agents/clinical-intake-agent",
+        "agents/decision-support-agent"
+      ]
+    },
+    {
+      "group": "Research",
+      "pages": [
+        "research/active-research"
+      ]
+    },
+    {
+      "group": "Enterprise",
+      "pages": [
+        "enterprise/enterprise-guide"
+      ]
+    },
+    {
+      "group": "Developer Guide",
+      "pages": [
+        "developers/authentication",
+        "developers/api-reference",
+        "developers/ehr-proxy-api",
+        "developers/ehr-integration",
+        "developers/sdk",
+        "developers/webhooks"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://linkedin.com/company/hana-health"
+  }
+}

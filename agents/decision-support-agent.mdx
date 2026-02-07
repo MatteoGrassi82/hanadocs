@@ -1,0 +1,48 @@
+---
+title: "Decision Support Agent"
+description: "Consensus Mechanism-powered agent for clinical conversation planning and real-time decision-making."
+---
+
+## Overview
+
+The Decision Support Agent leverages the Consensus Mechanism to enhance clinical conversation quality by providing comprehensive planning. It integrates contextual data from EHR, conversation history, and clinical protocols to deliver relevant questions, appropriate branching, and escalation decisions tailored to each patient interaction.
+
+## Contextual Data Providers
+
+- **EHR Gateway**: Patient historical information from electronic health records
+- **Conversation Memory**: Details from prior patient interactions
+- **Protocol Knowledge Base**: Clinical protocol rules, branching logic, and evidence-based guidelines
+- **Real-Time Monitoring**: Live conversation quality signals
+
+## Specialty Configuration
+
+- **Specialty Protocols (1-N)**: Domain-specific conversation flows
+- **Assessment Instruments**: Validated screening tools per specialty
+- **Escalation Rules**: Specialty-appropriate thresholds for human handoff
+
+## Consensus Mechanism Integration
+
+The Decision Support Agent dynamically utilizes consensus-based reasoning:
+- Contextual information from EHR, conversation history, and protocol rules aggregated
+- Consensus Engine determines most clinically relevant questions, branching decisions, and escalation triggers
+
+## Workflow
+
+1. **Input Processing**: Patient EHR data and conversation context undergo entity extraction
+2. **Parallel Processing**: Clinical queries routed to expert models; queries enhanced by protocol knowledge base
+3. **Consensus Building**: Results synthesized using weighted probabilities and expert agreement
+4. **Output Processing**: Plans validated with confidence scores, enabling revision and recalibration
+5. **Feedback Loop**: Conversation outcomes provide feedback; agent adjusts future planning
+
+## Clinical Outputs
+
+- **Prioritized Question Sets**: Dynamically ordered by clinical importance and patient context
+- **Protocol Branching Decisions**: Optimal path based on patient responses and guidelines
+- **Escalation Triggers**: When to hand off to human staff with full context
+- **Data Extraction Plans**: What structured data to capture from conversation
+
+## Future Enhancements
+
+- Graph-based patient modeling with dynamic knowledge graphs
+- Enhanced specialty coverage with expanded expert models
+- Predictive analytics for enhanced clinical responsiveness

@@ -1,0 +1,32 @@
+---
+title: "Encryption"
+description: "Comprehensive encryption standards for data at rest, in transit, and key management across HANA's infrastructure."
+---
+
+## Data Encryption
+
+- **Storage Encryption**: AES-256 with cloud-managed encryption keys for all stored data
+- **Communication Encryption**: TLS 1.3 enforced for all traffic between services and external endpoints
+- **Key Management**: Cloud KMS integration with strict access controls and automatic key rotation
+- **Reference**: Industry-standard encryption policies aligned with NIST guidelines
+
+## Network Security
+
+- **Protocol**: HTTPS enforced across all endpoints — no unencrypted communication permitted
+- **SSL Configuration**: Comprehensive SSL certificate deployment with automatic renewal
+- **Traffic Protection**: End-to-end encrypted communications between all system components
+- **Voice Data**: Real-time voice streams encrypted in transit via SRTP (Secure Real-time Transport Protocol)
+
+## Infrastructure Security
+
+- **Cloud Provider**: Healthcare-grade cloud infrastructure with executed BAA
+- **Architecture**: Multi-service microservices architecture with service mesh encryption (mutual TLS)
+- **Access Control**: Restricted infrastructure modification access with MFA and audit logging
+- **Monitoring**: Real-time alerts and automated remediation for security events
+
+## Conversation Data Encryption
+
+- **Voice recordings**: Encrypted at rest using AES-256 immediately upon capture
+- **Transcripts**: Encrypted in storage and during processing pipeline
+- **Clinical extractions**: Structured data encrypted at field level for sensitive PHI elements
+- **EHR data cache**: Encrypted in-memory cache with automatic expiration and secure clearing

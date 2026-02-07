@@ -1,0 +1,225 @@
+---
+title: "LRMs as a Judge"
+description: "Advanced framework for autonomous quality assessment and conversation evaluation using large reasoning models as judges."
+---
+
+## Overview
+
+Large Reasoning Models (LRMs) as a Judge represents HANA's advanced framework for autonomous quality assessment, conversation evaluation, and clinical accuracy validation. This system leverages capable evaluation models to assess outputs from the conversation engine, creating a hierarchical evaluation architecture that ensures quality, consistency, and reliability across all patient interactions.
+
+Built on our service architecture, the LRM judging system provides reference-free evaluation, multi-dimensional scoring, and continuous quality assurance without requiring expensive golden datasets or extensive human annotation.
+
+### Evaluation Metrics and KPIs
+
+**Quality Assessment Metrics:**
+
+Primary Quality Indicators:
+- Overall quality score (1-5 star rating system)
+- Dimension-specific scores (clinical accuracy, communication quality, protocol compliance, completeness)
+- Confidence intervals for score reliability assessment
+- Comparative rankings across model versions and protocol configurations
+
+Performance Metrics:
+- Evaluation throughput (conversations evaluated per minute)
+- Response latency for real-time evaluation requests
+- Judge model accuracy against human clinical reviewer ground truth
+- Resource efficiency (cost per evaluation)
+
+**Business Impact Measurements:**
+
+Quality Improvement Tracking:
+- Conversation quality trends over time and across clinical protocols
+- Patient satisfaction correlation with judge model scores
+- Error reduction rates attributable to judge-based quality control
+- Cost savings from automated quality assurance vs. manual review
+
+System Reliability Metrics:
+- Judge model availability and uptime
+- Evaluation consistency across different judge model instances
+- False positive/negative rates for quality threshold decisions
+- Escalation rates for human review requirements
+
+**Cost-Benefit Analysis:**
+
+Infrastructure Costs:
+- Judge model hosting: integrated with existing inference infrastructure
+- Evaluation framework: LLM-as-judge integration and custom evaluation tooling
+- Monitoring systems: extension of existing observability infrastructure
+
+Operational Efficiency Gains:
+- Automated quality assurance: significant reduction in manual conversation review
+- Consistent evaluation standards: elimination of subjective quality assessment variability
+- 24/7 quality monitoring: continuous evaluation without human intervention
+- Scalable assessment: linear scaling with conversation volume without proportional cost increase
+
+---
+
+## Core Architecture
+
+### Core Judging Architecture
+
+**Hierarchical Model Evaluation:**
+
+Primary Judge Models:
+- Large reasoning model: primary evaluation for complex clinical accuracy assessment and multi-turn conversation coherence
+- Specialized clinical model: domain-specific evaluation for medical terminology, assessment instrument scoring, and protocol compliance
+- Ensemble judging: multiple evaluation models provide consensus-based quality scores
+
+Specialized Judge Models:
+- Lightweight models: fast evaluation for simple quality checks (response formatting, basic safety)
+- Domain-specific judges: fine-tuned evaluators for clinical conversation patterns
+- Protocol-specific judges: evaluators trained on specific clinical workflow requirements
+
+### Reference-Free Evaluation System
+
+**Evaluation Tracking Infrastructure:**
+- Growing evaluation dataset of scored production conversations
+- Real-time quality scoring without requiring golden standard conversation transcripts
+- Systematic evaluation collection with automated processing pipelines
+- Automated data cleaning removing invalid or incomplete entries during processing
+
+**Quality Assessment Dimensions:**
+- High-quality evaluation datasets for identifying characteristics of excellent conversations
+- Low-quality evaluation datasets for failure mode identification and error pattern analysis
+- Comparative scoring between different model versions and protocol configurations
+- Auto-optimization algorithms for continuous score improvement
+
+**Judge Model Capabilities:**
+
+Content Quality Assessment:
+- Clinical accuracy evaluation using medical knowledge validation
+- Logical consistency checking for conversation flow and branching decisions
+- Completeness assessment for information collection goals
+- Relevance scoring for clinical appropriateness of questions and responses
+
+Communication Quality Evaluation:
+- Clarity and readability assessment for patient comprehension
+- Empathy and tone evaluation for sensitive clinical topics
+- Pacing appropriateness for patient communication style
+- Patient intent alignment for goal achievement assessment
+
+---
+
+## Evaluation Methodologies
+
+### Consensus-Based Judging
+
+**Multi-Judge Ensemble:**
+- Independent evaluation by multiple judge models from different perspectives
+- Consensus scoring using weighted voting mechanisms
+- Disagreement analysis for identifying edge cases requiring human review
+- Confidence-weighted aggregation for reliable final quality scores
+
+**Judge Model Specialization:**
+- Domain experts: clinical accuracy, medication safety, assessment instrument judges
+- Task specialists: conversation flow, data extraction, escalation decision judges
+- Quality dimensions: accuracy, clarity, completeness, relevance judges
+- Patient perspective: communication quality, empathy, satisfaction judges
+
+### Comparative Evaluation Framework
+
+**Model-vs-Model Assessment:**
+- Head-to-head comparisons between different model versions for A/B testing
+- Ranking systems for multiple candidate conversation approaches
+- Preference learning from comparative judgments
+- Quality difference quantification for deployment decisions
+
+**Human-vs-AI Alignment:**
+- Human clinical reviewer correlation studies for judge model validation
+- Bias detection in judge assessments across patient demographics
+- Cultural sensitivity evaluation for diverse patient populations
+- Ethical guideline compliance checking for clinical conversation content
+
+---
+
+## Applications
+
+### Domain-Specific Applications
+
+**Clinical Accuracy Assessment:**
+- Medication name and dosage validation using pharmaceutical databases
+- Assessment instrument scoring verification (PHQ-9, GAD-7, AUDIT-C administration rules)
+- Clinical data extraction accuracy evaluation against source EHR data
+- Medical terminology appropriateness for patient-facing communication
+
+**Protocol Compliance Evaluation:**
+- HIPAA compliance checking for PHI handling during conversations
+- Clinical protocol adherence verification for each conversation
+- Consent language delivery confirmation
+- Escalation trigger compliance for safety-critical scenarios
+
+**Patient Experience Assessment:**
+- Communication quality scoring for empathy, clarity, and pacing
+- Patient goal completion assessment (scheduling, information collection, screening)
+- Conversation efficiency evaluation (duration vs. complexity)
+- Satisfaction prediction based on conversation quality signals
+
+---
+
+## Quality and Performance
+
+### Judge Model Efficiency
+
+**Computational Optimization:**
+- Model selection algorithms choosing appropriate judge size for evaluation complexity
+- Caching strategies for repeated evaluation patterns (same protocol, similar conversations)
+- Batch processing optimization for post-call evaluation of multiple conversations
+- Resource scheduling to minimize impact on primary conversation inference workloads
+
+**Cost-Effective Judging:**
+- Tiered evaluation strategy using progressively more sophisticated judges
+- Early termination for obviously high or low quality conversations
+- Confidence-based routing to minimize expensive judge model usage
+- Quality threshold optimization balancing evaluation cost and accuracy
+
+### Quality Assurance Framework
+
+**Judge Reliability Assessment:**
+- Inter-judge agreement measurement for consistency validation
+- Test-retest reliability for judge model stability across time
+- Ground truth correlation where human clinical review scores exist
+- Expert clinical validation for judge model calibration
+
+**Bias and Fairness Monitoring:**
+- Demographic bias detection in judge assessments across patient populations
+- Language and dialect sensitivity analysis for multilingual conversations
+- Protocol bias identification and mitigation strategies
+- Temporal consistency monitoring for judge model drift
+
+---
+
+## Service Integration
+
+### Judge Service Components
+
+**Evaluation Orchestrator Service:**
+- Request routing to appropriate judge models based on conversation type and protocol
+- Load balancing across multiple judge model instances
+- Priority queuing for time-sensitive evaluations (flagged conversations)
+- Result aggregation from multiple judge models into composite quality score
+
+**Judge Model Registry:**
+- Model capability metadata for optimal judge selection per evaluation task
+- Performance benchmarks for each judge model type
+- Availability monitoring and automatic failover
+- Version management for judge model updates
+
+**Quality Scoring Service:**
+- Multi-dimensional scoring across clinical accuracy, communication quality, protocol compliance, and completeness
+- Confidence interval calculation for score reliability
+- Historical trend analysis for quality improvements per protocol and organization
+- Threshold-based alerting for quality degradation
+
+### Application Integration Patterns
+
+**Real-Time Judging APIs:**
+- Synchronous evaluation for immediate quality feedback on flagged conversations
+- Asynchronous batch evaluation for large-scale post-call quality assessment
+- Streaming evaluation for continuous quality monitoring during active conversations
+- Webhook integration for event-driven quality assessment (escalation triggers, safety flags)
+
+**Quality Gate Integration:**
+- Pre-deployment quality checks before new model or protocol versions go live
+- Runtime quality monitoring for live conversation quality tracking
+- Post-processing evaluation for historical conversation improvement analysis
+- A/B testing support for comparing different model versions and conversation approaches

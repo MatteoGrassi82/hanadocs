@@ -1,0 +1,145 @@
+---
+title: "Eval Based System"
+description: "HANA's adaptive reasoning models: multi-tiered processing, speculative decoding, infrastructure cost analysis, and model performance optimization."
+---
+
+## Overview
+
+HANA's Adaptive Reasoning Models represent a breakthrough in large-scale inference optimization and real-time clinical decision support. Built on our service architecture, these models dynamically adjust their reasoning processes based on clinical context, computational constraints, and performance requirements.
+
+The system leverages multi-tiered processing, speculative decoding, and self-calibration to deliver high performance while maintaining accuracy and reliability in production voice conversations.
+
+## Core Architecture
+
+### Multi-Tiered Processing System
+
+HANA's adaptive reasoning system employs a sophisticated multi-tiered architecture designed for real-time clinical analysis and decision support:
+
+**Processing Intervals:**
+- **Immediate checks (< 500ms)**: Response validation, entity grounding, safety filter — runs during every conversation turn
+- **Turn-level checks (1-3 seconds)**: Context coherence, goal tracking, sentiment analysis — runs between conversation turns
+- **Post-call analysis (async)**: Full transcript review, clinical accuracy audit, protocol compliance, quality scoring
+
+**Concurrent Processing Capabilities:**
+- Support for thousands of concurrent streaming voice sessions
+- CPU-optimized conversation engine for low-latency response generation
+- GPU-accelerated reasoning engine for pre-call planning and complex clinical analysis
+- Memory-efficient design with minimal RAM per active conversation session
+
+### Speculative Decoding Architecture
+
+HANA's conversation engine uses speculative decoding for faster response generation:
+
+- Smaller, faster model generates candidate continuations for the next conversation turn
+- Larger reasoning model verifies and selects optimal predictions against clinical protocol constraints
+- Custom optimization for the verification process to minimize latency
+- Self-calibration system adjusts selection weights during runtime based on conversation context
+
+**Generation and Verification Pipeline:**
+- Fast model generates multiple candidate responses based on current conversation state
+- Each candidate is verified against: protocol constraints, entity grounding, safety rules, and clinical appropriateness
+- Optimal candidate selected and delivered via streaming voice synthesis
+- Verification results feed back into calibration for future selections
+
+## Infrastructure & Cost Analysis
+
+### Current Usage & Projections
+
+**Baseline Costs:**
+- Current LLM API usage for reasoning engine: variable based on conversation volume
+- Voice synthesis and recognition: per-minute telephony and processing costs
+- Infrastructure: cloud compute, storage, and networking
+
+**Projected Infrastructure Savings:**
+- Optimized model routing reduces inference costs by 40-60% compared to single-model approaches
+- Cached reasoning plans for common patient profiles reduce redundant computation
+- Auto-scaling to zero during low-volume periods eliminates idle compute waste
+
+### Hardware Configuration
+
+**Production Setup:**
+- Kubernetes clusters with auto-scaling node pools
+- GPU nodes for reasoning engine inference (pre-call planning, post-call analysis)
+- CPU-optimized nodes for real-time conversation engine (latency-critical path)
+- Dedicated telephony infrastructure with geographic redundancy
+
+---
+
+## Model Performance & Optimization
+
+### Overview
+
+In the field of compute optimization, model routing, caching strategies, and batch processing optimization are crucial for enhancing performance. For cost optimization, intelligent complexity-based routing, reasoning plan reuse, and resource sharing across concurrent sessions are essential to efficiently manage resources and reduce expenses.
+
+### Technical Implementation
+
+**Memory Management:**
+- Conversation state maintained per active session with minimal memory footprint
+- EHR data cached with configurable TTL to reduce redundant API calls
+- Reasoning plans stored and reused for similar patient profiles
+- Efficient embedding storage and retrieval for patient context
+
+**Processing Optimization:**
+- Dynamic model routing based on conversation complexity (simple → fast model, complex → full reasoning pipeline)
+- Protocol-specific optimization: pre-computed conversation plans for common clinical workflows
+- Streaming voice synthesis begins before full response is composed (parallel processing)
+
+### Performance Metrics
+
+**Conversation Engine:**
+- Response latency: < 800ms p95 (time from patient speech end to HANA speech start)
+- Concurrent sessions: scales horizontally based on demand
+- Voice synthesis quality: natural conversational pacing with dynamic prosody
+
+**Reasoning Engine:**
+- Pre-call plan generation: < 3 seconds per patient
+- Post-call analysis: < 30 seconds per conversation
+- Clinical entity extraction accuracy: > 97%
+- Protocol compliance rate: > 97%
+
+### Performance Optimization Strategies
+
+**Adaptive Processing:**
+
+Dynamic Resource Allocation:
+- Automatic scaling based on call volume and time-of-day patterns
+- Context-aware compute allocation (complex protocols get more reasoning resources)
+- Priority-based processing queues for urgent clinical conversations
+
+Model Selection:
+- Lightweight models for simple conversation turns (confirmations, acknowledgments)
+- Full reasoning pipeline for clinical branching decisions and entity extraction
+- Specialized models for assessment instrument scoring (PHQ-9, GAD-7, etc.)
+
+**Efficiency Optimizations:**
+
+Compute Optimization:
+- Optimized inference for specific clinical conversation patterns
+- Pre-computed response segments for standard protocol language
+- Batch processing for post-call analysis across multiple conversations
+
+Cost Optimization:
+- Intelligent model routing based on complexity requirements
+- Caching strategies for repeated reasoning patterns (same protocol + similar patient profile)
+- Resource sharing across concurrent sessions with priority queuing
+
+---
+
+## Data Evaluation & Quality Assurance
+
+### Evaluation Framework
+
+**Dataset Management:**
+- Comprehensive evaluation dataset of scored production conversations, growing continuously
+- Data cleaning removes invalid or incomplete entries before evaluation
+- Continuous evaluation with systematic processing for quality stability
+
+**Evaluation Tools:**
+- LLM-as-judge integration for automated quality assessment
+- Reference-free evaluations without requiring golden standard transcripts
+- Separate evaluation tracks for high-quality examples and failure mode identification
+
+**Quality Metrics:**
+- Auto-optimization system to improve quality scores over time
+- Continuous feedback loop for model and protocol improvement
+- Performance tracking across different clinical protocols and patient demographics
