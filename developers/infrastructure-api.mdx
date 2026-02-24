@@ -1,0 +1,610 @@
+---
+title: "Infrastructure API"
+description: "Endpoints for provisioning, monitoring, and operating HANA in your environment."
+---
+
+## Base URL
+
+```
+Production: https://api.hana.health/v1/infra
+Sandbox:    https://sandbox.api.hana.health/v1/infra
+```
+
+All requests require `Authorization: Bearer hana_sk_live_...` and `X-ORG-ID` headers.
+
+```bash
+curl https://api.hana.health/v1/infra/health \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+---
+
+## Health & Readiness
+
+### System Health
+
+Returns aggregated health status across all subsystems. Use this for uptime monitoring and load balancer health checks.
+
+```
+GET /v1/infra/health
+```
+
+```bash
+curl https://api.hana.health/v1/infra/health \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+```json
+{
+  "status": "healthy",
+  "version": "2.14.3",
+  "uptime_seconds": 1284012,
+  "checks": {
+    "database": { "status": "healthy", "latency_ms": 3 },
+    "redis": { "status": "healthy", "latency_ms": 1 },
+    "queue": { "status": "healthy", "pending_jobs": 42 },
+    "ehr_proxy": { "status": "healthy", "latency_ms": 145 },
+    "reasoning_engine": { "status": "healthy", "model_loaded": true },
+    "conversation_engine": { "status": "healthy", "active_sessions": 7 }
+  },
+  "timestamp": "2026-02-24T14:30:00Z"
+}
+```
+
+Possible `status` values: `healthy`, `degraded`, `unhealthy`.
+
+### Readiness Probe
+
+Lightweight check for Kubernetes readiness probes. Returns `200` when the service can accept traffic, `503` otherwise.
+
+```
+GET /v1/infra/ready
+```
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" \
+  https://api.hana.health/v1/infra/ready \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+# 200
+```
+
+### Liveness Probe
+
+Minimal check for Kubernetes liveness probes. Returns `200` if the process is alive.
+
+```
+GET /v1/infra/live
+```
+
+---
+
+## EHR Connection Status
+
+### Get EHR Connection
+
+Returns current connectivity and sync status for each configured EHR integration.
+
+```
+GET /v1/infra/ehr/status
+```
+
+```bash
+curl https://api.hana.health/v1/infra/ehr/status \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+```json
+{
+  "connections": [
+    {
+      "id": "ehr_conn_01",
+      "system": "Epic",
+      "environment": "production",
+      "status": "connected",
+      "last_sync": "2026-02-24T14:28:00Z",
+      "latency_ms": 145,
+      "error_rate_1h": 0.002,
+      "throughput_1h": 1240
+    }
+  ]
+}
+```
+
+### Test EHR Connection
+
+Sends a test query to validate credentials and connectivity. Does not modify data.
+
+```
+POST /v1/infra/ehr/test
+```
+
+```json
+{
+  "connection_id": "ehr_conn_01"
+}
+```
+
+```json
+{
+  "status": "success",
+  "latency_ms": 162,
+  "fhir_version": "R4",
+  "capabilities": ["patient-read", "appointment-write", "encounter-write"]
+}
+```
+
+---
+
+## API Keys
+
+### List API Keys
+
+Returns all keys for your organization. Secrets are masked — only the last 4 characters are shown.
+
+```
+GET /v1/infra/keys
+```
+
+```bash
+curl https://api.hana.health/v1/infra/keys \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+```json
+{
+  "keys": [
+    {
+      "id": "key_live_01",
+      "name": "Production - Backend",
+      "hint": "...f4x2",
+      "scope": "full_access",
+      "environment": "production",
+      "created_at": "2025-11-01T00:00:00Z",
+      "last_used_at": "2026-02-24T14:22:00Z",
+      "expires_at": null
+    },
+    {
+      "id": "key_test_01",
+      "name": "Sandbox - Dev Team",
+      "hint": "...9k1a",
+      "scope": "full_access",
+      "environment": "sandbox",
+      "created_at": "2025-12-15T00:00:00Z",
+      "last_used_at": "2026-02-24T13:45:00Z",
+      "expires_at": "2026-06-15T00:00:00Z"
+    }
+  ]
+}
+```
+
+### Create API Key
+
+```
+POST /v1/infra/keys
+```
+
+```json
+{
+  "name": "CI/CD Pipeline",
+  "scope": "engagements_only",
+  "environment": "production",
+  "expires_in_days": 90
+}
+```
+
+**Response (201):**
+```json
+{
+  "id": "key_live_02",
+  "name": "CI/CD Pipeline",
+  "secret": "hana_sk_live_abc123...full_key_shown_once",
+  "scope": "engagements_only",
+  "environment": "production",
+  "created_at": "2026-02-24T14:30:00Z",
+  "expires_at": "2026-05-25T14:30:00Z"
+}
+```
+
+<Warning>The full secret is only returned once at creation time. Store it securely.</Warning>
+
+### Rotate API Key
+
+Creates a new key with the same scope and name. The old key remains valid for 24 hours to allow zero-downtime rotation.
+
+```
+POST /v1/infra/keys/{key_id}/rotate
+```
+
+```json
+{
+  "id": "key_live_02_rotated",
+  "secret": "hana_sk_live_def456...full_key_shown_once",
+  "old_key_expires_at": "2026-02-25T14:30:00Z"
+}
+```
+
+### Revoke API Key
+
+Immediately invalidates the key. Active requests using this key will fail.
+
+```
+DELETE /v1/infra/keys/{key_id}
+```
+
+Returns `204 No Content`.
+
+---
+
+## Usage & Metrics
+
+### Get Usage Summary
+
+Returns aggregated usage metrics for a date range. Useful for billing reconciliation and capacity planning.
+
+```
+GET /v1/infra/usage?from=2026-02-01&to=2026-02-24
+```
+
+```bash
+curl "https://api.hana.health/v1/infra/usage?from=2026-02-01&to=2026-02-24" \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+```json
+{
+  "period": {
+    "from": "2026-02-01T00:00:00Z",
+    "to": "2026-02-24T23:59:59Z"
+  },
+  "engagements": {
+    "total": 12450,
+    "completed": 11200,
+    "failed": 380,
+    "escalated": 870,
+    "avg_duration_seconds": 342
+  },
+  "channels": {
+    "voice_outbound": 8900,
+    "voice_inbound": 1200,
+    "sms": 2100,
+    "whatsapp": 250
+  },
+  "api_calls": {
+    "total": 284000,
+    "by_endpoint": {
+      "engagements": 98000,
+      "patients": 64000,
+      "ehr_proxy": 112000,
+      "other": 10000
+    }
+  },
+  "ehr_operations": {
+    "reads": 89000,
+    "writes": 23000,
+    "avg_latency_ms": 156
+  }
+}
+```
+
+### Get Rate Limit Status
+
+Returns your current rate limit consumption across endpoint groups.
+
+```
+GET /v1/infra/rate-limits
+```
+
+```json
+{
+  "limits": [
+    {
+      "endpoint_group": "engagements",
+      "limit": 100,
+      "remaining": 73,
+      "resets_at": "2026-02-24T14:31:00Z",
+      "window": "1m"
+    },
+    {
+      "endpoint_group": "ehr_proxy",
+      "limit": 300,
+      "remaining": 298,
+      "resets_at": "2026-02-24T14:31:00Z",
+      "window": "1m"
+    }
+  ]
+}
+```
+
+---
+
+## Queue & Jobs
+
+### Get Queue Status
+
+Returns the current state of background job queues. Monitor this to detect processing backlogs.
+
+```
+GET /v1/infra/queues
+```
+
+```json
+{
+  "queues": [
+    {
+      "name": "engagements.scheduled",
+      "pending": 42,
+      "processing": 3,
+      "failed": 0,
+      "avg_wait_ms": 1200,
+      "throughput_1h": 340
+    },
+    {
+      "name": "ehr.sync",
+      "pending": 8,
+      "processing": 2,
+      "failed": 1,
+      "avg_wait_ms": 800,
+      "throughput_1h": 1100
+    },
+    {
+      "name": "clinical_notes.generation",
+      "pending": 5,
+      "processing": 1,
+      "failed": 0,
+      "avg_wait_ms": 3400,
+      "throughput_1h": 210
+    }
+  ]
+}
+```
+
+### Retry Failed Jobs
+
+Requeues all failed jobs in a specific queue, or a single job by ID.
+
+```
+POST /v1/infra/queues/{queue_name}/retry
+```
+
+```json
+{
+  "job_id": "job_abc123"
+}
+```
+
+Omit `job_id` to retry all failed jobs in the queue.
+
+---
+
+## Audit Log
+
+### Query Audit Log
+
+Returns a time-ordered log of API actions and system events. Required for HIPAA audit trail compliance.
+
+```
+GET /v1/infra/audit-log
+```
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `from` | datetime | Start of range (required) |
+| `to` | datetime | End of range (default: now) |
+| `actor` | string | Filter by API key ID or user ID |
+| `action` | string | Filter by action type (see below) |
+| `resource` | string | Filter by resource type (`engagement`, `patient`, `key`, `config`) |
+| `limit` | integer | Max results (default 50, max 500) |
+| `cursor` | string | Pagination cursor |
+
+```bash
+curl "https://api.hana.health/v1/infra/audit-log?from=2026-02-24T00:00:00Z&action=key.created&limit=10" \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID"
+```
+
+```json
+{
+  "events": [
+    {
+      "id": "evt_001",
+      "timestamp": "2026-02-24T14:30:00Z",
+      "actor": "key_live_01",
+      "action": "engagement.created",
+      "resource": "eng_abc123",
+      "ip": "203.0.113.42",
+      "metadata": {
+        "patient_id": "P-12345",
+        "protocol": "medication-adherence-diabetes"
+      }
+    }
+  ],
+  "cursor": "eyJsYXN0IjoiZXZ0XzAwMSJ9",
+  "has_more": true
+}
+```
+
+**Action types:** `engagement.created`, `engagement.cancelled`, `patient.created`, `patient.updated`, `key.created`, `key.rotated`, `key.revoked`, `config.updated`, `ehr.connected`, `ehr.disconnected`, `export.requested`.
+
+---
+
+## Configuration
+
+### Get Environment Config
+
+Returns the current runtime configuration for your organization. Sensitive values are redacted.
+
+```
+GET /v1/infra/config
+```
+
+```json
+{
+  "organization": {
+    "id": "org_healthsys01",
+    "name": "Metro Health System",
+    "plan": "enterprise",
+    "region": "us-east-1"
+  },
+  "features": {
+    "voice_outbound": true,
+    "voice_inbound": true,
+    "sms": true,
+    "whatsapp": false,
+    "ehr_proxy": true,
+    "patient_memory": true,
+    "white_label": true,
+    "multi_language": ["en", "es"]
+  },
+  "limits": {
+    "max_concurrent_calls": 50,
+    "max_engagements_per_day": 5000,
+    "retention_days": 365
+  },
+  "ehr": {
+    "system": "Epic",
+    "fhir_base_url": "https://fhir.metrohealth.org/R4",
+    "client_id": "hana_...redacted",
+    "scopes": ["patient/*.read", "appointment/*.*", "encounter/*.*"]
+  },
+  "webhooks": {
+    "endpoint": "https://metrohealth.org/webhooks/hana",
+    "events": ["engagement.*", "patient.updated"],
+    "signing_secret_hint": "...x4f2"
+  },
+  "escalation": {
+    "default_phone": "+1-555-NURSE",
+    "urgent_phone": "+1-555-ONCALL",
+    "email": "care-team@metrohealth.org"
+  }
+}
+```
+
+### Update Configuration
+
+Partial update — only include fields you want to change.
+
+```
+PATCH /v1/infra/config
+```
+
+```bash
+curl -X PATCH https://api.hana.health/v1/infra/config \
+  -H "Authorization: Bearer $HANA_API_KEY" \
+  -H "X-ORG-ID: $HANA_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "limits": { "max_concurrent_calls": 75 },
+    "escalation": { "default_phone": "+1-555-0199" }
+  }'
+```
+
+```json
+{
+  "updated_fields": ["limits.max_concurrent_calls", "escalation.default_phone"],
+  "effective_at": "2026-02-24T14:35:00Z"
+}
+```
+
+<Warning>Configuration changes take effect within 60 seconds across all nodes.</Warning>
+
+---
+
+## Data Export
+
+### Request Export
+
+Triggers an async export of engagement data, clinical notes, or audit logs. Returns a job ID to poll for completion.
+
+```
+POST /v1/infra/exports
+```
+
+```json
+{
+  "type": "engagements",
+  "format": "csv",
+  "from": "2026-01-01T00:00:00Z",
+  "to": "2026-02-24T23:59:59Z",
+  "filters": {
+    "status": "completed",
+    "protocol": "medication-adherence-diabetes"
+  },
+  "encryption": {
+    "method": "pgp",
+    "public_key_id": "key_pgp_01"
+  }
+}
+```
+
+**Response (202):**
+```json
+{
+  "export_id": "exp_abc123",
+  "status": "processing",
+  "estimated_records": 11200,
+  "created_at": "2026-02-24T14:30:00Z"
+}
+```
+
+**Export types:** `engagements`, `clinical_notes`, `audit_log`, `patients`.
+
+**Formats:** `csv`, `json`, `fhir_ndjson`.
+
+### Get Export Status
+
+```
+GET /v1/infra/exports/{export_id}
+```
+
+```json
+{
+  "export_id": "exp_abc123",
+  "status": "complete",
+  "download_url": "https://exports.hana.health/exp_abc123?token=...",
+  "expires_at": "2026-02-25T14:30:00Z",
+  "records": 11200,
+  "size_bytes": 4823040,
+  "checksum_sha256": "a1b2c3..."
+}
+```
+
+Download URLs are pre-signed and expire after 24 hours.
+
+---
+
+## Error Codes
+
+Infrastructure endpoints use the same error format as the core API:
+
+```json
+{
+  "error": {
+    "code": "QUEUE_NOT_FOUND",
+    "message": "Queue 'engagements.scheduled_v2' does not exist.",
+    "status": 404
+  }
+}
+```
+
+| Code | Status | When |
+|------|--------|------|
+| `UNAUTHORIZED` | 401 | Invalid or expired API key |
+| `FORBIDDEN` | 403 | Key lacks `admin` or `infra` scope |
+| `QUEUE_NOT_FOUND` | 404 | Invalid queue name |
+| `EXPORT_NOT_FOUND` | 404 | Export ID does not exist |
+| `EXPORT_TOO_LARGE` | 413 | Export exceeds 10M records — narrow filters |
+| `CONFIG_VALIDATION` | 422 | Invalid config value |
+| `RATE_LIMITED` | 429 | Too many requests |
+| `EHR_UNAVAILABLE` | 503 | EHR system unreachable |
+
+<Card title="Back to API Reference" icon="arrow-left" href="/developers/api-reference">
+  Core API for engagements, patients, and protocols.
+</Card>
